@@ -1,0 +1,144 @@
+@model UserSearchVM
+<script>
+    function onAdditionalDataName() {
+        return {
+            text: $("#NameSearch").val()
+        };
+    }
+    function onAdditionalDataSurname() {
+        return {
+            text: $("#SurnameSearch").val()
+        };
+    }
+    function onAdditionalDataEmail() {
+        return {
+            text: $("#EmailSearch").val()
+        };
+    }
+</script>
+
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <form asp-controller="Authority" asp-action="UserSearchPost" id="UserSearchForm"
+                  data-ajax="true"
+                  data-ajax-method="POST"
+                  data-ajax-mode="replace"
+                  data-ajax-update="#content">
+                <div class="row">
+                    <div class="col s6">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.NameSearch)
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().AutoCompleteFor(i=>i.NameSearch)
+                          .DataTextField("Name")
+                          .Filter("contains")
+                          .MinLength(3)
+                          .HtmlAttributes(new { style = "width:100%" })
+                          .DataSource(source =>
+                                  {
+                              source.Read(read =>
+                              {
+                                  read.Action("ServerFiltering_UsersName", "Authority").Data("onAdditionalDataName");
+                              })
+                              .ServerFiltering(true);
+                          })
+                    )
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.SurnameSearch)
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().AutoCompleteFor(i=>i.SurnameSearch)
+                          .DataTextField("Surname")
+                          .Filter("contains")
+                          .MinLength(3)
+                          .HtmlAttributes(new { style = "width:100%" })
+                          .DataSource(source =>
+                                  {
+                              source.Read(read =>
+                              {
+                                  read.Action("ServerFiltering_UsersSurname", "Authority").Data("onAdditionalDataSurname");
+                              })
+                              .ServerFiltering(true);
+                          })
+                    )
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s6">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.UserTypeSearch)
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().DropDownListFor(i=>i.UserTypeSearch)
+                              .DataTextField("Name")
+                              .DataValueField("Id")
+                              .Value("1")
+                              .DataSource(source => {
+                                  source.Read(read =>
+                                  {
+                                      read.Action("Get_UserTypeEnumList", "Definitions");
+                                  });
+                              })
+                              .HtmlAttributes(new { style = "width: 100%" })
+                        )
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.EmailSearch)
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().AutoCompleteFor(i=>i.EmailSearch)
+                          .DataTextField("Email")
+                          .Filter("contains")
+                          .MinLength(3)
+                          .HtmlAttributes(new { style = "width:100%" })
+                          .DataSource(source =>
+                                  {
+                              source.Read(read =>
+                              {
+                                  read.Action("ServerFiltering_UsersEmail", "Authority").Data("onAdditionalDataEmail");
+                              })
+                              .ServerFiltering(true);
+                          })
+                    )
+                        </div>
+                    </div>
+                </div><br />
+                <div class="row">
+                    <div class="col s12">
+                        <button id="refresh-Button" type="submit" class="btn btn-block">@Localizer[LocalizationCaptions.Search].Value</button>
+                    </div>
+                </div>
+                <br />
+                <div id="content">
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+    $(document).ready(function () {
+        $("#UserSearchForm").submit();
+    });
+</script>

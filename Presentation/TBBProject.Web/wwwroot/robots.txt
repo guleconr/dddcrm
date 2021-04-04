@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /bookmark/ 
+Allow: /
+Sitemap: https://www.TBBProject.de/sitemaps/sitemap.xml
+Sitemap: https://www.TBBProject.de/sitemaps/sitemap-jobs.xml
+Sitemap: https://www.TBBProject.de/sitemaps/sitemap-categories.xml
+Sitemap: https://www.TBBProject.de/sitemaps/sitemap-search.xml
+   
+
+
+

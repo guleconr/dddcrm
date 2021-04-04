@@ -1,0 +1,28 @@
+@model UserVM
+<div class="row s12" style="min-width:750px;">
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Name, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Surname)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Surname, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Email, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(i => i.Id)

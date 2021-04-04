@@ -1,0 +1,113 @@
+@model VideoGalleryVM
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <form asp-controller="VideoGallery" asp-action="VideoGallerySearchPost" id="VideoGalleryForm"
+                  data-ajax="true"
+                  data-ajax-method="POST"
+                  data-ajax-mode="replace"
+                  data-ajax-update="#content">
+                <div class="row">
+                    <div class="col s4">
+                        <div class="editor-label">
+                            @Html.LabelFor(i => i.ReleaseDateSearch)
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().DatePickerFor(i=>i.ReleaseDateSearch).Culture("tr-TR")
+                .Value(DateTime.Now).Format("{0:dd.MM.yyyy}")
+                .HtmlAttributes(new { style = "width: 100%" })
+                .DateInput()
+            )
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-bottom:20px;">
+                </div>
+                <div class="row">
+                    <div class="col s8">
+
+                    </div>
+                    <div class="col s2">
+                        <button class="buttonConfirm" type="submit">
+                            @Localizer[LocalizationCaptions.Filter].Value
+                        </button>
+                    </div>
+                    <div class="col s2">
+                        <button class="buttonClear" type="reset" id="resetButton">
+                            @Localizer[LocalizationCaptions.Clear].Value
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div id="content">
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script>
+    function addVideoGallery(e) {
+        $('#popupWindowDiv').load('/VideoGalleryAdd/' + e);
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+            title: "Video Galeri Ekle"
+        });
+    }
+    function updateVideoGallery(e) {
+        $('#popupWindowDiv').load('/VideoGalleryUpdate/'+e);
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+            title: "Video Galeri Düzenle"
+        });
+    }
+
+    function deleteVideoGallery(e) {
+        $.ajax({
+            type: "POST",
+            url: "/VideoGallery/EditingVideoGallery_Destroy",
+            data: {
+                'Id': e,
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        $("#VideoGalleryForm").submit();
+    }
+
+    function updateVideoGalleryLang(e) {
+        $('#popupWindowDiv').load('/VideoGalleryLangUpdate/' + e);
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+            title: "Video Galeri Dil Düzenle"
+        });
+    }
+
+    function ajaxSuccess() {
+        $('#popupWindowDiv').html("");
+        $("#windowPopUp").data("kendoWindow").close();
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+
+    $("#resetButton").click(function () {
+        $('#VideoGalleryForm').trigger("reset");
+        $("#VideoGalleryForm").submit();
+    });
+    $(document).ready(function () {
+        $("#VideoGalleryForm").submit();
+    });
+    function dataBound() {
+        this.expandRow(this.tbody.find("tr.k-master-row").first());
+    }
+
+    function sync_handler(e) {
+        this.read();
+    }
+
+</script>

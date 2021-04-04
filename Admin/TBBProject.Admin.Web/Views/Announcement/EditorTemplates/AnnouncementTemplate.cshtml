@@ -1,0 +1,107 @@
+@model AnnouncementVM
+<script>
+    function dateChange(e) {
+        $('#SozlesmeBasStr').val(e.sender._oldText).trigger("change");
+    }
+    $(document).ready(function () {
+        $('#SozlesmeBasStr').val($('#SozlesmeBas').val()).trigger("change");
+    });
+</script>
+<div class="row s12" style="min-width:750px;">
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LanguageId)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(p=>p.LanguageId)
+                                    .HtmlAttributes(new { style = "width:100%" })
+                                    .OptionLabel(@Localizer[LocalizationCaptions.SelectLanguage].Value)
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("Get_LanguageList", "Definitions");
+                                        });
+                                    }))
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AnnouncementTypeId)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(p=>p.AnnouncementTypeId)
+                                    .HtmlAttributes(new { style = "width:100%" })
+                                    .OptionLabel("Duyuru Tipi Seçiniz")
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("Get_AnnouncementList", "Definitions");
+                                        });
+                                    }))
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Title)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Title, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Content)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().EditorFor(p => p.Content)
+          .HtmlAttributes(new { style = "width: 100%; height:500px", aria_label = "editor" })
+            .Tools(tools => tools
+            .Clear()
+            .Bold().Italic().Underline()
+            .JustifyLeft().JustifyCenter().JustifyRight()
+            .InsertUnorderedList().InsertOrderedList()
+            .Outdent().Indent()
+            .CreateLink().Unlink()
+            .InsertImage()
+            .TableEditing()
+            .FontName()
+            .FontSize()
+            .ForeColor().BackColor()
+            )
+            .ImageBrowser(imageBrowser => imageBrowser
+            .Image("~/shared/UserFiles/Images/{0}")
+            .Read("Read", "ImageBrowser")
+            .Create("Create", "ImageBrowser")
+            .Destroy("Destroy", "ImageBrowser")
+            .Upload("Upload", "ImageBrowser")
+            )
+         )
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Image)
+        </div>
+        <div class="editor-field">
+
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.ReleaseDate)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DatePickerFor(i=>i.ReleaseDate).Culture("tr-TR")
+                .Value(DateTime.Now).Format("{0:dd.MM.yyyy}").Events(i=>i.Change("dateChange"))
+                .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+                .DateInput()
+            )
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.IsRelease)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().CheckBoxFor(i=>i.IsRelease).Label("IsRelease"))
+        </div>
+    </div>
+</div>
+
+@Html.HiddenFor(i => i.Id)

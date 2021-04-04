@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <NetCoreVersion>2.2.0</NetCoreVersion>
+    <MicrosoftExtensionsVersion>2.2.0</MicrosoftExtensionsVersion>
+    <AspNetCoreVersion>2.2.0</AspNetCoreVersion>
+    <AspNetCoreMvcVersion>2.2.0</AspNetCoreMvcVersion>
+    <AutoMapperVersion>7.0.1</AutoMapperVersion>
+    <NWebSecVersion>2.0.0</NWebSecVersion>
+    <NewstonJsonVersion>11.0.2</NewstonJsonVersion>
+    <FluentValidationVersion>8.0.100</FluentValidationVersion>
+    <StackExchangeRedisVersion>2.0.519</StackExchangeRedisVersion>
+  </PropertyGroup>
+</Project>

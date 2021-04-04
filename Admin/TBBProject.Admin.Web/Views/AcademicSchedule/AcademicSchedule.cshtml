@@ -1,0 +1,126 @@
+@model AcademicScheduleVM
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <form asp-controller="AcademicSchedule" asp-action="AcademicScheduleSearchPost" id="AcademicScheduleForm"
+                  data-ajax="true"
+                  data-ajax-method="POST"
+                  data-ajax-mode="replace"
+                  data-ajax-update="#content">
+                <div class="row">
+                    <div class="col s4">
+                        <div class="editor-label">
+                            @Html.LabelFor(i => i.StartDate)
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().DatePickerFor(i=>i.StartDate).Culture("tr-TR")
+                .Value(DateTime.Now).Format("{0:dd.MM.yyyy}")
+                .HtmlAttributes(new { style = "width: 100%" })
+                .DateInput()
+            )
+                        </div>
+                    </div>
+                    <div class="col s4">
+                        <div class="editor-label">
+                            @Html.LabelFor(i => i.EndDate)
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().DatePickerFor(i=>i.EndDate).Culture("tr-TR")
+                .Value(DateTime.Now).Format("{0:dd.MM.yyyy}")
+                .HtmlAttributes(new { style = "width: 100%" })
+                .DateInput()
+            )
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-bottom:20px;">
+                </div>
+                <div class="row">
+                    <div class="col s8">
+
+                    </div>
+                    <div class="col s2">
+                        <button class="buttonConfirm" type="submit">
+                            @Localizer[LocalizationCaptions.Filter].Value
+                        </button>
+                    </div>
+                    <div class="col s2">
+                        <button class="buttonClear" type="reset" id="resetButton">
+                            @Localizer[LocalizationCaptions.Clear].Value
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div id="content">
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script>
+    function addAcademicSchedule(e) {
+        $('#popupWindowDiv').load('/AcademicScheduleAdd/' + e);
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+            title: "Akademik Takvim Ekle"
+        });
+    }
+    function updateAcademicSchedule(e) {
+        $('#popupWindowDiv').load('/AcademicScheduleUpdate/'+e);
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+            title: "Akademik Takvim Düzenle"
+        });
+    }
+
+    function deleteAcademicSchedule(e) {
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/AcademicSchedule/EditingAcademicSchedule_Destroy",
+            data: {
+                'Id': e,
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        $("#AcademicScheduleForm").submit();
+    }
+
+    function updateAcademicScheduleLang(e) {
+        $('#popupWindowDiv').load('/AcademicScheduleLangUpdate/' + e);
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+            title: "Akademik Takvim Dil Düzenle"
+        });
+    }
+
+    function ajaxSuccess() {
+        $('#popupWindowDiv').html("");
+        $("#windowPopUp").data("kendoWindow").close();
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+
+    $("#resetButton").click(function () {
+        $('#AcademicScheduleForm').trigger("reset");
+        $("#AcademicScheduleForm").submit();
+    });
+    $(document).ready(function () {
+        $("#AcademicScheduleForm").submit();
+    });
+    function dataBound() {
+        this.expandRow(this.tbody.find("tr.k-master-row").first());
+    }
+
+    function sync_handler(e) {
+        this.read();
+    }
+
+</script>

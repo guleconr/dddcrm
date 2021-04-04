@@ -1,0 +1,77 @@
+@model AnnouncementVM
+
+@(Html.Kendo().Grid<AnnouncementVM>()
+    .Name("grid")
+    .Columns(columns => {
+        columns.Bound(p => p.AnnouncementTypeStr).Filterable(false);
+        columns.Bound(p => p.ReleaseDate).Filterable(false).Format("{0:dd.MM.yyyy}");
+        columns.Bound(p => p.IsReleaseStr).Filterable(false);
+        columns.Bound(p => p.ApprovalStatusStr).Filterable(false);
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"addAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">add</i>");
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
+
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create().Text(@Localizer[LocalizationCaptions.AddNewRecord].Value);
+    })
+     .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title("Duyuru Ekle"))
+                        .TemplateName("AnnouncementTemplate").ConfirmDelete("Kaydı silmek için onaylayınız!").DisplayDeleteConfirmation("Kaydı silmek istediğinize eminmisiniz!!"))
+
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:800px;" })
+    .ClientDetailTemplateId("ChildGrid")
+    .DataSource(dataSource => dataSource
+       .Ajax()
+        .Batch(true)
+        .PageSize(20)
+        .ServerOperation(true)
+            .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+        .Model(model => {
+            model.Id(p => p.Id);
+        })
+            .Create("EditingAnnouncement_Create", "Announcement")
+            .Update("EditingAnnouncement_Update", "Announcement")
+            .Destroy("EditingAnnouncement_Destroy", "Announcement")
+            .Read(read => read.Action("Get_Announcement", "Announcement", new { IsRelease = Model.IsReleaseSearch, ReleaseDate = Model.ReleaseDateSearch, AnnouncementType = Model.AnnouncementTypeIdSearch })))
+            .Events(events => events.DataBound("dataBound"))
+
+    )
+
+
+<script id="ChildGrid" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<AnnouncementLangVM>()
+            .Name("grid_#=Id#")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Title).Filterable(false);
+                columns.Bound(p => p.Content).Filterable(false);
+                columns.Bound(p => p.Language.Name).Filterable(false);
+                columns.Bound(p => p.Content).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAnnouncementLang(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+
+            })
+
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .ServerOperation(true)
+                .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+                .Model(model =>
+                {
+                    model.Id(p => p.Id);
+                })
+                .Read(read => read.Action("Get_AnnouncementLang", "Announcement", new { announcementId = "#=Id#" }))
+            )
+            .Pageable()
+            .Sortable()
+            .ToClientTemplate()
+    )
+</script>
+
+
+
+<script>
+
+
+</script>

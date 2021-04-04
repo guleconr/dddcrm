@@ -1,0 +1,9 @@
+@using Kendo.Mvc.UI
+@model IEnumerable<LanguageVM>
+@(Html.Kendo().DropDownListFor(m => m)
+      .OptionLabel("seçiniz")
+      .DataValueField("Id")
+      .DataTextField("Name")
+      .DataSource(s => s.Read("Get_LanguagesAsyc", "Definitions")
+    ).HtmlAttributes(new { style = "width: 100%", required = "required" ,title=""+@Localizer[LocalizationCaptions.Required].Value})
+)

@@ -1,0 +1,57 @@
+@model long
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <div class="row">
+                <div class="col s2">
+                    <div class="demo-section k-content">
+                        @(Html.Kendo().TreeView()
+                        .Name("treeview")
+                        .DataTextField("Name")
+                        .Animation(animation => animation.Expand(open =>                              {
+                            open.Expand(ExpandDirection.Vertical);
+                            open.Fade(FadeDirection.In);}))
+                            .DataSource(dataSource => dataSource.Read(read => read.Action("GetAuthorityTree", "Authority")
+                            )
+                        ).Events(events => events
+                        .Select("onSelectAuthority")
+                    ))
+                    </div>
+                </div>
+                <div class="col s10">
+                    <div class="demo-section k-content">
+                        <div id="authorityDiv"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+    function onSelectAuthority(e) {
+        var selectedText = this.text(e.node);
+        var dataItem = e.sender.dataItem(e.node);
+        var selectedId = dataItem.id;
+        $("#authorityDiv").load("/Authority/AuthorityGridDiv?authorityId=" + selectedId);
+    }
+    function OpenWindow(e) {
+        var tv = $('#treeview').data('kendoTreeView'),
+            selected = tv.select(),
+            item = tv.dataItem(selected);
+        $('#ParentMenu').val(item.id).change();
+    }
+  
+</script>

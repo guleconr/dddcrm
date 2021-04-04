@@ -1,0 +1,43 @@
+[
+  {
+    "outputFileName": "wwwroot/css/bundle.min.css",
+    "inputFiles": [
+      //"wwwroot/css/base.css",
+      //"wwwroot/css/responsive.css",
+      //"wwwroot/css/font-awesome.css",
+      "wwwroot/css/style.css",
+      "wwwroot/css/colors/yellow.css",
+      "wwwroot/css/PagedList.css",
+      "wwwroot/css/datepicker.css",
+      "wwwroot/css/owl.carousel.css",
+      "wwwroot/css/owl.theme.default.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "commentMode": "none"
+    }
+  }
+  //{
+  //  "outputFileName": "wwwroot/js/bundle.min.js",
+  //  "inputFiles": [
+  //    "wwwroot/scripts/custom.js",
+  //    "wwwroot/scripts/jquery.superfish.js",
+  //    "wwwroot/scripts/jquery.mask.min.js",
+  //    "wwwroot/scripts/jquery.themepunch.tools.min.js",
+  //    "wwwroot/scripts/jquery.themepunch.revolution.min.js",
+  //    "wwwroot/scripts/jquery.themepunch.showbizpro.min.js",
+  //    "wwwroot/scripts/jquery.flexslider-min.js",
+  //    "wwwroot/scripts/chosen.jquery.min.js",
+  //    "wwwroot/scripts/jquery.magnific-popup.min.js",
+  //    "wwwroot/scripts/waypoints.min.js",
+  //    "wwwroot/scripts/jquery.counterup.min.js",
+  //    "wwwroot/scripts/jquery.jpanelmenu.js",
+  //    "wwwroot/scripts/stacktable.js",
+  //    "wwwroot/scripts/slick.min.js",
+  //    "wwwroot/scripts/headroom.min.js",
+  //    "wwwroot/scripts/general.js",
+  //    "wwwroot/scripts/datepicker.min.js",
+  //    "wwwroot/scripts/i18n/datepicker.de-DE.js"
+  //  ]
+  //}
+]

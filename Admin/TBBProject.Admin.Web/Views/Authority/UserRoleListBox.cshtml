@@ -1,0 +1,69 @@
+<form asp-controller="Authority" asp-action="UserRolePost" id="userRoleForm"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-mode="replace"
+      data-ajax-success="formSuccess"
+      data-ajax-failure="formFailure">
+    <br />
+    <div class="row">
+        <div class="col s6">
+            @(Html.Kendo().ListBox()
+            .Name("optional")
+            .HtmlAttributes(new { style="width:100%;"}).DataTextField("Name").DataValueField("Id")
+            .Toolbar(toolbar =>
+            {
+                toolbar.Position(ListBoxToolbarPosition.Right);
+                toolbar.Tools(tools => tools
+                    .TransferTo()
+                    .TransferFrom()
+                );
+            })
+            .ConnectWith("selected")
+            .BindTo(ViewBag.Roles)
+        )
+        </div>
+        <div class="col s6">
+            @(Html.Kendo().ListBox()
+            .Name("selected").Events(i=>i.Add("listBoxChangeAdd").Remove("listBoxChangeRemove"))
+            .HtmlAttributes(new { style = "width:100%;" }).DataTextField("Name").DataValueField("Id")
+            .BindTo(ViewBag.RolesAdded)
+            .Selectable(ListBoxSelectable.Single)
+        )
+        </div>
+        @Html.Hidden("selectedIds")
+        @Html.Hidden("selectedUserId")
+        @Html.AntiForgeryToken()
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col s6">
+            <button id="cancel-btn" name="cancel" type="reset" class="btn btn-block">@Localizer[LocalizationCaptions.Cancel].Value</button>
+        </div>
+        <div class="col s6">
+            <button id="save-btn" type="submit" class="btn btn-block">@Localizer[LocalizationCaptions.Save].Value</button>
+        </div>
+    </div>
+</form>
+<style>
+    .k-listbox-toolbar {
+        padding-left: 25px;
+    }
+</style>
+<script>
+    function pushRoles(item, index) {
+        selectedRoles.push(item.Id);
+    }
+    $(document).ready(function () {
+        var listBox = $("#selected").data("kendoListBox");
+        var datas = listBox.dataSource.data();
+        datas.forEach(pushRoles);
+        var dropdownlist = $("#users").data("kendoDropDownList");
+        $("#selectedUserId").val(dropdownlist.value());
+    });
+    $("#cancel-btn").click(function () {
+        var dropdownlist = $("#users").data("kendoDropDownList");
+        $("#listBox_Div").load("/Authority/UserRoleListBox?userId=" + dropdownlist.value());
+    });
+
+</script>

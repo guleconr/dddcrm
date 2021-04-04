@@ -1,0 +1,24 @@
+DBContext Migration
+
+Select Default Project = Core/TBBProject.Core.Data
+
+Command Line:   
+
+$env:ASPNETCORE_ENVIRONMENT='Development'
+
+update-database -context datacontext -startupproject TBBProject.Admin.Web    (clas lib olduğu için startup project vermemiz lazım)
+
+Add-Migration "MigrationName" -Context DataContext -StartupProject TBBProject.Admin.Web
+
+ApplicationDbContext Migration:
+
+Select Default Project = Presentation/TBBProject.Web
+
+
+///////////////////////////////////////////////////////
+
+$env:ASPNETCORE_ENVIRONMENT='Development'
+
+update-database -context datacontext
+
+ Add-Migration "MigrationName" -Context DataContext -StartupProject TBBProject.Admin.Web 

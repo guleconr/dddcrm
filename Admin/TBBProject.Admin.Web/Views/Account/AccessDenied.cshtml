@@ -1,0 +1,20 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer[LocalizationCaptions.AccessDenied].Value;
+}
+
+<div class="clearfix"></div>
+<div id="titlebar" class="photo-bg" style="background-image: url(images/all-categories-photo.jpg);">
+    <div class="container">
+        <div class="ten columns">
+            <h2>Access denied</h2>
+        </div>
+    </div>
+</div>
+<header>
+    <h2 class="text-danger">@Localizer[LocalizationCaptions.PermissionRequiredToAccessPage]</h2>
+</header>
+<div class="clearfix"></div>
+
+<a href="/logoff">@Localizer[LocalizationCaptions.Logout]</a>

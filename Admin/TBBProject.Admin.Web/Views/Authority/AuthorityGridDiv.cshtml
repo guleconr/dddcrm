@@ -1,0 +1,46 @@
+@model long
+@(Html.Kendo().Grid<AuthorityVM>
+    ()
+    .Name("grid")
+    .Columns(columns => {
+        columns.Bound(p => p.Name);
+        columns.Bound(p => p.Title);
+        columns.Bound(p => p.MenuOrder).Filterable(false);
+        columns.Bound(p => p.Url).Filterable(false);
+        columns.Bound(p => p.IsMenu).ClientTemplate(
+        "# if (IsMenu != 0) {#" +
+        Localizer[LocalizationCaptions.Yes].Value +
+        "#} else {#" +
+        Localizer[LocalizationCaptions.No
+        ].Value +
+        "#}#").Filterable(false);
+        columns.Bound(p => p.Icon).ClientTemplate("<i class='material-icons'>#=Icon #</i>").Width(75).Filterable(false);
+        columns.Command(command => { command.Edit().Text(Localizer[LocalizationCaptions.Edit].Value); command.Destroy().Text(Localizer[LocalizationCaptions.Delete].Value); }).Width(250);
+    })
+     .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))
+    .Sortable()
+    .Scrollable()
+    .Filterable()
+    .Events(i => i.Save("onGridRead"))
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create().Text(Localizer[LocalizationCaptions.AddNewRecord].Value);
+    })
+    .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w=>w.Title(Localizer[LocalizationCaptions.Authority].Value).Events(e=>e.Open("OpenWindow"))).TemplateName("AuthorityUpdateView").ConfirmDelete(Localizer[LocalizationCaptions.ConfirmDelete].Value).DisplayDeleteConfirmation(Localizer[LocalizationCaptions.ConfirmDelete].Value))
+    .HtmlAttributes(new { style = "height:430px;" })
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .Batch(true)
+    .PageSize(5)
+    .ServerOperation(true)
+  .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+    .Model(model => {
+        model.Id(p => p.Id);
+        model.Field(p => p.IsMenu).Editable(true);
+    })
+    .Create("EditingAuthority_Create", "Authority")
+    .Update("EditingAuthority_Update", "Authority")
+    .Destroy("EditingAuthority_Destroy", "Authority")
+    .Read(read => read.Action("Get_Authoritys", "Authority", new { parentId = Model}))
+    )
+    )

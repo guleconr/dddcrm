@@ -1,0 +1,66 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer[Common.Aduit].Value;
+}
+<section class="content">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h1>Audits  - @ViewBag.CacheResult</h1>
+                </div>
+                <div class="box-body">
+                    <a href="/Audit/Alternate" class="btn btn-success">@Localizer[Common.AlternateView]</a> <br />
+                    @(Html.Kendo().Grid<Audit>()
+                        .Name("grid")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.DateTime).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Width(150).ClientTemplate("#= kendo.toString(DateTime, \"dd/MM/yyyy hh:mm:ss\") #").Title(Localizer[Common.DateTime].Value);
+                            columns.Bound(c => c.User).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Title(Localizer[Account.User].Value);
+                            columns.Bound(c => c.UserIp).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Width(150).Title(Localizer[Account.UserIp].Value);
+                            columns.Bound(c => c.ClassName).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Width(400).Title(Localizer[Common.ClassName].Value);
+                            columns.Bound(c => c.MethodName).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Title(Localizer[Common.MethodName].Value);
+                            columns.Bound(c => c.Args).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Title(Localizer[Common.Args].Value);
+                        })
+                        .Editable(editable => editable.Mode(GridEditMode.InLine))
+                        .HtmlAttributes(new { style = "height: 600px;" })
+                        .Scrollable()
+                        .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+                        .Groupable()
+                        .Sortable()
+                        .Pageable(pageable => pageable
+                            .Refresh(true)
+                            .PageSizes(new[] { 5, 10, 20, 50, 100 })
+                            .ButtonCount(5))
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(20)
+                            .Events(events => events.Error("error_handler"))
+                            .Model(model => model.Id(p => p.Id))
+                            .Read(read => read.Action("RenderAudits", "Audit"))
+                        )
+                    )
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    function error_handler(e) {
+        renderMessages(e.xhr);
+
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>

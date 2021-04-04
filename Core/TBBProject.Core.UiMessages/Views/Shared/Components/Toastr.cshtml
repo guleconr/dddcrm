@@ -1,0 +1,59 @@
+@using TBBProject.Core.UiMessages
+@model MessageViewModel
+
+<script>
+    $(document).ready(function () {
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "400",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        @if(Model.Messages != null)
+        {
+            foreach(var message in Model.Messages)
+            {
+               @Html.Raw(message.ToString())
+            }
+        }
+    });
+
+    function renderMessages(request)
+    {
+        if (request != null) {
+            var messages = JSON.parse(request.getResponseHeader('X-Message-Info'));
+            if (messages != null) {
+                 messages.forEach(function (entry) {
+                if (entry.messageType == "Error") {
+                    toastr.error(entry.message, entry.title);
+                }
+
+                if (entry.messageType == "Info") {
+                    toastr.info(entry.message, entry.title);
+                }
+
+                if (entry.messageType == "Warning") {
+                    toastr.warning(entry.message, entry.title);
+                }
+
+                if (entry.messageType == "Success") {
+                    toastr.success(entry.message, entry.title);
+                }
+            });
+            }
+           
+        }
+    }
+</script>

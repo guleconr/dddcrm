@@ -1,0 +1,143 @@
+
+ul:not(.browser-default) {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+div.k-edit-form-container {
+  width: auto;
+  height: auto;
+}
+
+.k-icon .k-clear-value .k-i-close {
+  margin-top: 10px;
+}
+
+.k-autocomplete span.k-icon.k-clear-value.k-i-close {
+  margin-top: 12px;
+}
+
+.k-window > div.k-popup-edit-form {
+  padding: 1rem 1rem !important;
+}
+
+.k-edit-form-container .k-edit-buttons {
+  margin: 0px;
+  padding: 1rem 1rem;
+}
+
+.k-multiselect-wrap .k-select {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  /* padding: .03em .2em; */
+}
+
+.k-dropdowntree .k-multiselect-wrap .k-button .k-select, .k-multiselect .k-multiselect-wrap .k-button .k-select {
+  display: -ms-flexbox;
+  display: flex;
+  cursor: pointer;
+  margin-left: 0rem;
+  -ms-flex-item-align: stretch;
+  align-self: stretch;
+}
+
+.gradient-45deg-indigo-purple {
+  background: -webkit-linear-gradient(45deg,#303f9f,#7b1fa2) !important;
+  background: linear-gradient(45deg,#789ed1,#26d0eb) !important;
+}
+
+.sidenav li a.active {
+  color: #fff;
+  background: linear-gradient(45deg,#789ed1,#26d0eb) !important;
+  box-shadow: 3px 3px 20px 0 rgba(123,31,162,.5);
+}
+
+.gradient-45deg-indigo-red {
+  background: -webkit-linear-gradient(45deg,#303f9f,#7b1fa2) !important;
+  background: linear-gradient(45deg,#ecd8b7d6,#ea7827d6) !important;
+}
+
+.buttonClear {
+  background: #E3E3E3;
+  border: 1px solid #E5E5E5;
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: bold;
+  height: 39px;
+  width: 100%;
+  font-size: 14px;
+  line-height: 14px;
+  align-items: center;
+  text-align: center;
+  color: #4E5B6D;
+}
+
+.buttonConfirm {
+  background: #0072BC;
+  border: 1px solid #0072BC;
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 14px;
+  align-items: center;
+  height: 39px;
+  text-align: center;
+  width: 100%;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.k-grid tr {
+  padding-top: 10PX;
+  padding-bottom: 10px;
+}
+
+.k-grid-header {
+  background-color: rgba(51, 170, 51, 0.00);
+  border-bottom-color rgba(51, 170, 51, 0.00);
+  border-left-color: rgba(51, 170, 51, 0.00);
+  border-right-color: rgba(51, 170, 51, 0.00);
+  border-top-color: rgba(51, 170, 51, 0.00);
+  border-top: 0px;
+  color: #A0ABBB;
+}
+
+div#grid {
+  border: 0px;
+}
+
+.k-grid-content {
+  border: 1px;
+}
+
+.k-grid tr td {
+  border-width: 0 0 1px 1px;
+  border-style: NONE;
+  border-bottom: 1px solid #ECF6FF;
+}
+
+.k-grid .k-grid-header .k-header .k-link {
+  height: auto;
+}
+
+.k-grid .k-grid-header .k-header {
+  white-space: normal;
+}
+
+.card .card-title {
+  font-size: 13px;
+  font-weight: 400;
+  margin: -10px;
+  background-color: aliceblue;
+  padding-left: 20px;
+}
+
+.card .card-content {
+  padding: 10px;
+}
+.k-numerictextbox .k-numeric-wrap .k-input {
+  padding: 0px !important;
+}

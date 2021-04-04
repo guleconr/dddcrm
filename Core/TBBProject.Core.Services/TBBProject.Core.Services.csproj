@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Sendgrid" Version="9.21.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\TBBProject.Core.Common\TBBProject.Core.Common.csproj" />
+    <ProjectReference Include="..\..\Core\TBBProject.Core.Data\TBBProject.Core.Data.csproj" />
+  </ItemGroup>
+</Project>

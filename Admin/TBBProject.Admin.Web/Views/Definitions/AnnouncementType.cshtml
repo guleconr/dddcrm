@@ -1,0 +1,39 @@
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <div class="col-md-12">
+                @(Html.Kendo().Grid<AnnouncementTypeVM>()
+                    .Name("grid")
+                    .Columns(columns => {
+                        columns.Bound(p => p.Name);
+                        columns.Command(command => { command.Edit().Text("Güncelle"); command.Destroy().Text("Sil"); }).Width(250);
+                    })
+                    .Sortable()
+                    .Scrollable()
+                    .Filterable()
+                      .ToolBar(toolbar =>
+                      {
+                          toolbar.Create().Text("Yeni Kayıt Ekle");
+                      })
+                     .Editable(editable => editable.Mode(GridEditMode.InLine).ConfirmDelete("Kaydet")
+                     .DisplayDeleteConfirmation("Kaydet2"))
+                    .HtmlAttributes(new { style = "height:750px;" })
+                    .DataSource(dataSource => dataSource
+                       .Ajax()
+                        .Batch(true)
+                        .ServerOperation(true)
+                        .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+                        .Model(model => {
+                            model.Id(p => p.Id);
+                        })
+                        .Create("EditingAnnouncementType_Create", "Definitions")
+                        .Update("EditingAnnouncementType_Update", "Definitions")
+                        .Destroy("EditingAnnouncementType_Destroy", "Definitions")
+                        .Read(read => read.Action("Get_AnnouncementType", "Definitions"))
+                     )
+                )
+
+            </div>
+        </div>
+    </div>
+</div>

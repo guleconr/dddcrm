@@ -1,0 +1,118 @@
+@model AuthorityVM
+<div class="row s12" style="min-width:750px;">
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Name, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Url)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Url, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.BreadCrumb)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.BreadCrumb, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Icon)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(i=>i.Icon)
+                .HtmlAttributes(new { style = "width:100%" })
+                .OptionLabel(@Localizer[LocalizationCaptions.SelectIcon].Value)
+                .DataTextField("Name")
+                .DataValueField("Name")
+                .Height(310).Filter(FilterType.Contains)
+                 .Template("<i class='material-icons dp4'>#:data.Name#</i> <span> #: data.Name #</span>")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("Get_IconsAsyc", "Definitions");
+                    });
+                })
+            )
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsMenu)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(i=>i.IsMenu)
+                .HtmlAttributes(new { style = "width:100%" })
+                .OptionLabel(@Localizer[LocalizationCaptions.IsMenuSelect].Value)
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("Get_YesNoEnumList", "Definitions");
+                    });
+                })
+            )
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.MenuOrder)
+        </div>
+        <div class="editor-field">
+            @Html.Kendo().NumericTextBoxFor(i => i.MenuOrder).HtmlAttributes(new { style = "width:100%" }).Decimals(0).Step(1).Format("0")
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AuthorityType)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(i=>i.AuthorityType)
+                .HtmlAttributes(new { style = "width:100%" })
+                .OptionLabel(@Localizer[LocalizationCaptions.AuthorityTypeSelect].Value)
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("Get_AuthorityTypeEnumList", "Definitions");
+                    });
+                })
+            )
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Text)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Text, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Title)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Title, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Status)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(i=>i.Status)
+                .HtmlAttributes(new { style = "width:100%" })
+                .OptionLabel(@Localizer[LocalizationCaptions.StatusSelect].Value)
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("Get_StatusEnumList", "Definitions");
+                    });
+                })
+            )
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(i => i.ParentMenu)
+@Html.HiddenFor(i => i.Id)

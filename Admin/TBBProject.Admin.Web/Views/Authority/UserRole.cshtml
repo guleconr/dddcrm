@@ -1,0 +1,102 @@
+@model long
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <div class="row">
+                <div class="col s12">
+                    @(Html.Kendo().DropDownList()
+                    .Name("users")
+                    .HtmlAttributes(new { style = "width:100%" })
+                    .DataTextField("Email")
+                    .DataValueField("Id")
+                    .Height(310)
+                    .Filter("contains")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("Get_UsersDropdown", "Authority");
+                        }).ServerFiltering(true);
+                    }).Events(e =>
+                    {
+                        e.Change("onChangeUser").DataBound("onDataBoundUser");
+                    })
+                )
+                    <div id="listBox_Div">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var selectedRoles = [];
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+    function onChangeUser(e) {
+        var dropdownlist = $("#users").data("kendoDropDownList");
+        $("#listBox_Div").load("/Authority/UserRoleListBox?userId=" + dropdownlist.value());
+        selectedRoles = [];
+    }
+    function onDataBoundUser(e) {
+        if (this.select() === -1) { //check whether any item is selected
+            this.select(0);
+            this.trigger("change");
+        }
+        var dropdownlist = $("#users").data("kendoDropDownList");
+        $("#listBox_Div").load("/Authority/UserRoleListBox?userId=" + dropdownlist.value());
+        
+    }
+    function listBoxChangeAdd(e) {
+        var selectedRole = e.dataItems;
+        selectedRoles.push(selectedRole[0].Id);
+        $("#selectedIds").val(selectedRoles);
+    }
+    function listBoxChangeRemove(e) {
+        var deletedRole = e.dataItems;
+        selectedRoles = removeA(selectedRoles, deletedRole[0].Id);
+        $("#selectedIds").val(selectedRoles);
+    }
+    function getWidgetName(e) {
+        var listBoxId = e.sender.element.attr("id");
+        var widgetName = listBoxId === "optional" ? "left widget" : "right widget";
+        return widgetName;
+    }
+
+    function removeA(arr) {
+        var what, a = arguments, L = a.length, ax;
+        while (L > 1 && arr.length) {
+            what = a[--L];
+            while ((ax = arr.indexOf(what)) !== -1) {
+                arr.splice(ax, 1);
+            }
+        }
+        return arr;
+    }
+
+    function formSuccess(e) {
+        if (e.IsSuccess) {
+            toastr.success(e.ResultText, '');
+        }
+        else {
+            toastr.error(e.ResultText, '');
+        }
+    }
+
+    function formFailure(e) {
+        toastr.error(e.ResultText, '');
+    }
+</script>

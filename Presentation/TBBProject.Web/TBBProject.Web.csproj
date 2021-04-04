@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-TBBProject.Web-208AF8FD-4EA0-4ECE-BA2E-2A85517CF23E</UserSecretsId>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="TBBProject_logs\**" />
+    <Compile Remove="Views\Account\**" />
+    <Compile Remove="Views\Employer\**" />
+    <Compile Remove="wwwroot\downloads\hrbaxmls\**" />
+    <Compile Remove="wwwroot\files\**" />
+    <Compile Remove="wwwroot\scripts\**" />
+    <Content Remove="TBBProject_logs\**" />
+    <Content Remove="Views\Account\**" />
+    <Content Remove="Views\Employer\**" />
+    <Content Remove="wwwroot\downloads\hrbaxmls\**" />
+    <Content Remove="wwwroot\files\**" />
+    <Content Remove="wwwroot\scripts\**" />
+    <EmbeddedResource Remove="TBBProject_logs\**" />
+    <EmbeddedResource Remove="Views\Account\**" />
+    <EmbeddedResource Remove="Views\Employer\**" />
+    <EmbeddedResource Remove="wwwroot\downloads\hrbaxmls\**" />
+    <EmbeddedResource Remove="wwwroot\files\**" />
+    <EmbeddedResource Remove="wwwroot\scripts\**" />
+    <None Remove="TBBProject_logs\**" />
+    <None Remove="Views\Account\**" />
+    <None Remove="Views\Employer\**" />
+    <None Remove="wwwroot\downloads\hrbaxmls\**" />
+    <None Remove="wwwroot\files\**" />
+    <None Remove="wwwroot\scripts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
+    <PackageReference Include="Google.Apis" Version="1.41.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.41.0" />
+    <PackageReference Include="Kendo.for.AspNet.Core" Version="2019.1.115" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="3.6.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
+    <PackageReference Include="Sentry.AspNetCore" Version="1.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="7.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Business\TBBProject.Core.Business\TBBProject.Core.Business.csproj" />
+    <ProjectReference Include="..\..\Core\TBBProject.Core.Localization\TBBProject.Core.Localization.csproj" />
+    <ProjectReference Include="..\..\Core\TBBProject.Core.Web\TBBProject.Core.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Home\GoogleTest.cshtml" />
+    <Content Remove="wwwroot\downloads\2014_12_TBBProject_Flyer_Endversion.pdf" />
+    <Content Remove="wwwroot\favicon-16x16.png" />
+    <Content Remove="wwwroot\favicon-32x32.png" />
+    <Content Remove="wwwroot\favicon-96x96.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="dsvfeed.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="feed.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

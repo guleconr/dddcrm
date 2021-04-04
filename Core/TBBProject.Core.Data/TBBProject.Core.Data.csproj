@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190905064423_BranchCategoryUpdate.cs" />
+    <Compile Remove="Migrations\20190905064423_BranchCategoryUpdate.Designer.cs" />
+    <Compile Remove="Migrations\20190912105607_CategoryOfAdzuna.cs" />
+    <Compile Remove="Migrations\20190912105607_CategoryOfAdzuna.Designer.cs" />
+    <Compile Remove="Migrations\20190927131452_CandidateAppointmentArchive.cs" />
+    <Compile Remove="Migrations\20190927131452_CandidateAppointmentArchive.Designer.cs" />
+    <Compile Remove="Migrations\20190927131744_CandidateAppointmentArchiveV2.cs" />
+    <Compile Remove="Migrations\20190927131744_CandidateAppointmentArchiveV2.Designer.cs" />
+    <Compile Remove="Migrations\20191004135618_AppointmentScheduler.cs" />
+    <Compile Remove="Migrations\20191004135618_AppointmentScheduler.Designer.cs" />
+    <Compile Remove="Migrations\20191004140029_AppointmentScheduler.cs" />
+    <Compile Remove="Migrations\20191004140029_AppointmentScheduler.Designer.cs" />
+    <Compile Remove="Migrations\20191021081902_AppointmentStatuUpdate.cs" />
+    <Compile Remove="Migrations\20191021081902_AppointmentStatuUpdate.Designer.cs" />
+    <Compile Remove="Migrations\20191107115246_CandidateCallStatus.cs" />
+    <Compile Remove="Migrations\20191107115246_CandidateCallStatus.Designer.cs" />
+    <Compile Remove="Migrations\20191108070929_CandidateDocuments.cs" />
+    <Compile Remove="Migrations\20191108070929_CandidateDocuments.Designer.cs" />
+    <Compile Remove="Migrations\20191112070718_CanDocUploadedFile.cs" />
+    <Compile Remove="Migrations\20191112070718_CanDocUploadedFile.Designer.cs" />
+    <Compile Remove="Migrations\20191118133451_JobOfferSkillLevels.cs" />
+    <Compile Remove="Migrations\20191118133451_JobOfferSkillLevels.Designer.cs" />
+    <Compile Remove="Migrations\20191118133548_JobOfferSkillLevels.cs" />
+    <Compile Remove="Migrations\20191118133548_JobOfferSkillLevels.Designer.cs" />
+    <Compile Remove="Migrations\20191230142949_JOProfessions.cs" />
+    <Compile Remove="Migrations\20191230142949_JOProfessions.Designer.cs" />
+    <Compile Remove="Migrations\20200221103548_ProfessionsDomainModelFix.cs" />
+    <Compile Remove="Migrations\20200221103548_ProfessionsDomainModelFix.Designer.cs" />
+    <Compile Remove="Migrations\20200225111957_ModelRefactoring.cs" />
+    <Compile Remove="Migrations\20200225111957_ModelRefactoring.Designer.cs" />
+    <Compile Remove="Migrations\20200225113806_ModelRefactoring.cs" />
+    <Compile Remove="Migrations\20200225113806_ModelRefactoring.Designer.cs" />
+    <Compile Remove="Migrations\20200225115850_ModelRefactoring.cs" />
+    <Compile Remove="Migrations\20200225115850_ModelRefactoring.Designer.cs" />
+    <Compile Remove="Migrations\20200225120132_ModelRefactoring.cs" />
+    <Compile Remove="Migrations\20200225120132_ModelRefactoring.Designer.cs" />
+    <Compile Remove="Migrations\20200225120355_ModelRefactoring.cs" />
+    <Compile Remove="Migrations\20200225120355_ModelRefactoring.Designer.cs" />
+    <Compile Remove="Migrations\20200330123458_HrbaError_Entity_Added.cs" />
+    <Compile Remove="Migrations\20200330123458_HrbaError_Entity_Added.Designer.cs" />
+    <Compile Remove="Migrations\20200602142100_Migration_02_06_2020_3.cs" />
+    <Compile Remove="Migrations\20200602142100_Migration_02_06_2020_3.Designer.cs" />
+    <Compile Remove="Migrations\20200602142857_Migration_02_06_2020_4.cs" />
+    <Compile Remove="Migrations\20200602142857_Migration_02_06_2020_4.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TBBProject.Core.Common\TBBProject.Core.Common.csproj" />
+    <ProjectReference Include="..\TBBProject.Core.Data.Domain\TBBProject.Core.Data.Domain.csproj" />
+  </ItemGroup> 
+
+</Project>

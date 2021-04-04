@@ -1,0 +1,71 @@
+@model long
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <div class="col-md-12">
+                @(Html.Kendo().DropDownList()
+                    .Name("roles")
+                    .HtmlAttributes(new { style = "width:100%" })
+                    .DataTextField("Name")
+                    .DataValueField("Id")
+                    .Height(310)
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("Get_RolesDropdown", "Authority");
+                        });
+                    }).Events(e =>
+                    {
+                        e.Change("onChangeRole").DataBound("onDataBoundRole");
+                    })
+                )
+                <div id="grid_Div">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+    function onChangeRole(e) {
+        var dropdownlist = $("#roles").data("kendoDropDownList");
+        $("#grid_Div").load("/Authority/RoleAuthorityTree?roleId=" + dropdownlist.value());
+    }
+    function onDataBoundRole(e) {
+        if (this.select() === -1) { //check whether any item is selected
+            this.select(0);
+            this.trigger("change");
+        }
+        var dropdownlist = $("#roles").data("kendoDropDownList");
+        $("#grid_Div").load("/Authority/RoleAuthorityTree?roleId=" + dropdownlist.value());
+    }
+
+    function formSuccess(e) {
+        if (e.IsSuccess) {
+            toastr.success(e.ResultText, '');
+        }
+        else {
+            toastr.error(e.ResultText, '');
+        }
+    }
+
+    function formFailure(e) {
+        toastr.error(e.ResultText, '');
+    }
+
+</script>

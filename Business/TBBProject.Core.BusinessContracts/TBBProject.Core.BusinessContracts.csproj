@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kendo.for.AspNet.Core" Version="2019.1.115" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\TBBProject.Core.Common\TBBProject.Core.Common.csproj" />
+    <ProjectReference Include="..\..\Core\TBBProject.Core.Data.Domain\TBBProject.Core.Data.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,57 @@
+@model long
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <div class="col-md-12">
+                @(Html.Kendo().Grid<RoleVM>()
+                    .Name("grid")
+                    .Columns(columns => {
+                        columns.Bound(p => p.Name);
+                        columns.Command(command => { command.Edit().Text(Localizer[LocalizationCaptions.Edit].Value); command.Destroy().Text(Localizer[LocalizationCaptions.Delete].Value); }).Width(250);
+                    })
+                    .Pageable(pager => pager.AlwaysVisible(true).PageSizes(new int[] { 5, 10, 20, 100 }))
+                    .Sortable()
+                    .Scrollable()
+                    .Filterable()
+                    .Events(i=>i.Save("onGridRead"))
+                     .ToolBar(toolbar =>
+                     {
+                         toolbar.Create().Text(Localizer[LocalizationCaptions.AddNewRecord].Value);
+                     })
+                     .Editable(editable => editable.Mode(GridEditMode.InLine).ConfirmDelete(Localizer[LocalizationCaptions.ConfirmDelete].Value).DisplayDeleteConfirmation(Localizer[LocalizationCaptions.ConfirmDelete].Value))
+                    .HtmlAttributes(new { style = "height:430px;" })
+                    .DataSource(dataSource => dataSource
+                       .Ajax()
+                        .Batch(true)
+                        .PageSize(10)
+                        .ServerOperation(true)
+                        .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+                        .Model(model => {
+                            model.Id(p => p.Id);
+                            model.Field(p => p.Name);
+                        })
+                        .Create("EditingRoles_Create", "Authority")
+                        .Update("EditingRoles_Update", "Authority")
+                        .Destroy("EditingRoles_Destroy", "Authority")
+                        .Read(read => read.Action("Get_Roles", "Authority"))
+                     )
+                )
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>

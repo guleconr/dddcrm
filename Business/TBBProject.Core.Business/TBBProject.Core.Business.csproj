@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kendo.for.AspNet.Core" Version="2019.1.115" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\TBBProject.Core.Data.Domain\TBBProject.Core.Data.Domain.csproj" />
+    <ProjectReference Include="..\..\Datalayer\TBBProject.Core.DataContracts\TBBProject.Core.DataContracts.csproj" />
+    <ProjectReference Include="..\..\Datalayer\TBBProject.Core.Data\TBBProject.Core.DataLayer.csproj" />
+    <ProjectReference Include="..\..\Core\TBBProject.Core.Data\TBBProject.Core.Data.csproj" />
+    <ProjectReference Include="..\TBBProject.Core.BusinessContracts\TBBProject.Core.BusinessContracts.csproj" />
+  </ItemGroup>
+
+</Project>

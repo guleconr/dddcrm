@@ -1,0 +1,23 @@
+<Project>
+<Import Project="dependencies.props" />
+
+	<PropertyGroup>
+	  <Product>TBBProject</Product>
+		<Copyright>TBBProject</Copyright>
+		<Authors></Authors>
+    <Version>0.1.0.0</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion> 
+    <FileVersion>0.1.0.0</FileVersion> 
+		<NoWarn>$(NoWarn);1701;1702;1705;CS1591;CS1570</NoWarn>
+		<GenerateAssemblyCopyrightAttribute>true</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+	  <LangVersion>latest</LangVersion>
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)..\..\App.ruleset</CodeAnalysisRuleSet>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Deterministic>False</Deterministic>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+</Project>

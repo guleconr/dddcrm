@@ -1,0 +1,76 @@
+@model AcademicScheduleVM
+
+@(Html.Kendo().Grid<AcademicScheduleVM>()
+    .Name("grid")
+    .Columns(columns => {
+        columns.Bound(p => p.StartDate).Filterable(false).Format("{0:dd.MM.yyyy}");
+        columns.Bound(p => p.EndDate).Filterable(false).Format("{0:dd.MM.yyyy}");
+        columns.Bound(p => p.Quota).Filterable(false);
+        columns.Bound(p => p.StartDate).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAcademicSchedule(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+        columns.Bound(p => p.StartDate).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"addAcademicSchedule(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">add</i>");
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteAcademicSchedule(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
+
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create().Text(@Localizer[LocalizationCaptions.AddNewRecord].Value);
+    })
+     .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title("Akademik Takvim Ekle"))
+                        .TemplateName("AcademicScheduleTemplate").ConfirmDelete("Kaydı silmek için onaylayınız!").DisplayDeleteConfirmation("Kaydı silmek istediğinize eminmisiniz!!"))
+
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:800px;" })
+    .ClientDetailTemplateId("ChildGrid")
+    .DataSource(dataSource => dataSource
+       .Ajax()
+        .Batch(true)
+        .PageSize(20)
+        .ServerOperation(true)
+            .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+        .Model(model => {
+            model.Id(p => p.Id);
+        })
+            .Create("EditingAcademicSchedule_Create", "AcademicSchedule")
+            .Update("EditingAcademicSchedule_Update", "AcademicSchedule")
+            .Destroy("EditingAcademicSchedule_Destroy", "AcademicSchedule")
+            .Read(read => read.Action("Get_AcademicSchedule", "AcademicSchedule", new { ReleaseDate = Model.StartDate })))
+            .Events(events => events.DataBound("dataBound"))
+
+    )
+
+
+<script id="ChildGrid" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<AcademicScheduleLangVM>()
+            .Name("grid_#=Id#")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Title).Filterable(false);
+                columns.Bound(p => p.Url).Filterable(false);
+                columns.Bound(p => p.Language.Name).Filterable(false);
+                columns.Bound(p => p.Url).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAcademicScheduleLang(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+
+            })
+
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .ServerOperation(true)
+                .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+                .Model(model =>
+                {
+                    model.Id(p => p.Id);
+                })
+                .Read(read => read.Action("Get_AcademicScheduleLang", "AcademicSchedule", new { academicScheduleId = "#=Id#" }))
+            )
+            .Pageable()
+            .Sortable()
+            .ToClientTemplate()
+    )
+</script>
+
+
+
+<script>
+
+
+</script>

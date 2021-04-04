@@ -1,0 +1,36 @@
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model IPagedList<Audit>
+@{
+    ViewData["Title"] = "Audits";
+}
+<section class="content">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h1>Audits</h1>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <a href="/Audit" class="btn btn-success">@Localizer[Common.Audit]</a> <br />
+
+                    <table class="table table-hover">
+                        @foreach (var audit in Model)
+                        {
+                            <tr>
+                                <td>@audit.ToString()</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+                <div class="box-footer">
+                    @Html.PagedListPager(Model, page => Url.Action("Alternate", new { page }))
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="App.Metrics" Version="4.1.0" />
+    <PackageReference Include="App.Metrics.AspNetCore.Endpoints" Version="4.1.0" />
+    <PackageReference Include="App.Metrics.Reporting.TextFile" Version="4.1.0" />
+    <PackageReference Include="App.Metrics.AspNetCore.Mvc" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TBBProject.Core.Common\TBBProject.Core.Common.csproj" />
+  </ItemGroup>
+
+</Project>

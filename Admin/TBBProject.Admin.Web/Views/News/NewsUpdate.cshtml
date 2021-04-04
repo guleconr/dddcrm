@@ -1,0 +1,56 @@
+@model NewsVM
+
+<script>
+    $(function () {
+        $("form").kendoValidator();
+        $("#buttonCancel").click(function () {
+            $("#windowPopUp").data("kendoWindow").close();
+        });
+    });
+
+    function completed() {
+        $("#windowPopUp").data("kendoWindow").close();
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+</script>
+<form asp-controller="News" asp-action="EditingNews_Update" id="NewsUpdateForm"
+      data-ajax="true"
+      data-ajax-complete="completed"
+      data-ajax-method="POST">
+    <div class="row s12" style="min-width:750px;">
+        <div class="form-group">
+            <div class="editor-label">
+                @Html.LabelFor(i => i.ReleaseDate)
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().DatePickerFor(i=>i.ReleaseDate).Culture("tr-TR")
+                .Format("{0:dd.MM.yyyy}").Events(i=>i.Change("dateChange"))
+                .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+                .DateInput()
+            )
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(i => i.IsRelease)
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().CheckBoxFor(i=>i.IsRelease).Label("IsRelease"))
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col s6">
+            <button class="buttonClear" id="buttonCancel" type="button">
+                @Localizer[LocalizationCaptions.Cancel].Value
+            </button>
+        </div>
+        <div class="col s6">
+            <button class="buttonConfirm" type="submit">
+                @Localizer[LocalizationCaptions.Save].Value
+            </button>
+        </div>
+    </div>
+    @Html.HiddenFor(i => i.Id)
+</form>
+
+

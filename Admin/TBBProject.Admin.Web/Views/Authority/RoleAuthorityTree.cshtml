@@ -1,0 +1,91 @@
+@model long
+<script>
+    function checkedNodeIds(nodes, checkedNodes) {
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].checked) {
+                checkedNodes.push(nodes[i].id);
+            }
+
+            if (nodes[i].hasChildren) {
+                checkedNodeIds(nodes[i].children.view(), checkedNodes);
+            }
+        }
+    }
+    function onCheck(e) {
+        var checkedNodes = [],
+            treeView = $("#treeview").data("kendoTreeView"),
+            message;
+        checkedNodeIds(treeView.dataSource.view(), checkedNodes);
+        if (checkedNodes.length > 0) {
+            message = "IDs of checked nodes: " + checkedNodes.join(",");
+        } else {
+            message = "No nodes checked.";
+        }
+        $("#selectedIds").val(checkedNodes);
+        var dropdownlist = $("#roles").data("kendoDropDownList");
+        $("#selectedRoleId").val(dropdownlist.value());
+    }
+    function DataBound(e) {
+        var treeview = $("#treeview").data("kendoTreeView");
+        treeview.expand(".k-item");
+    }
+
+</script>
+<script id="treeview-template" type="text/kendo-ui-template">
+    #: item.Name ##: item.id #
+</script>
+<form asp-controller="Authority" asp-action="RoleAuthorityPost" id="roleAuthorityForm"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-mode="replace"
+      data-ajax-success="formSuccess"
+      data-ajax-failure="formFailure">
+    @(Html.Kendo().TreeView()
+            .Name("treeview")
+            .DataTextField("Name").Events(i=>i.DataBound("DataBound"))
+            .Checkboxes(checkboxes => checkboxes
+                .CheckChildren(true)
+            )
+             .Events(events => events
+                .Check("onCheck")
+            )
+             .DataSource(dataSource => dataSource.Custom()
+                .Transport(transport => transport
+                    .Read(read => read
+                        .Action("GetRoleAuthorityTree", "Authority",new { roleId=Model})
+                    )
+                )
+                .Schema(schema => schema
+                    .Model(model =>
+                    {
+                        model.Field("checked", typeof(bool)).From("ischecked");
+                        model.Id("id");
+                    })
+                )
+                )
+        )
+    @Html.Hidden("selectedIds")
+    @Html.Hidden("selectedRoleId")
+    @Html.AntiForgeryToken()
+    <div class="col s12">
+        <div class="row">
+            <div class="col s6">
+                <button id="cancel-btn" name="cancel" type="reset" class="btn btn-block">@Localizer[LocalizationCaptions.Cancel].Value</button>
+            </div>
+            <div class="col s6">
+                <button id="save-btn" type="submit" class="btn btn-block">@Localizer[LocalizationCaptions.Save].Value</button>
+            </div>
+        </div>
+    </div>
+</form>
+<style>
+    #treeview .k-sprite {
+        background-image: url("@Url.Content("~/shared/web/treeview/coloricons-sprite.png")");
+    }
+
+    .rootfolder { background-position: 0 0; }
+    .folder     { background-position: 0 -16px; }
+    .pdf        { background-position: 0 -32px; }
+    .html       { background-position: 0 -48px; }
+    .image      { background-position: 0 -64px; }
+</style>

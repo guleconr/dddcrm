@@ -1,0 +1,5 @@
+<ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
+    @Html.Raw(ViewBag.LeftMenu)
+
+    @HttpContextAccessor.HttpContext.Items["isVerified"]
+</ul>

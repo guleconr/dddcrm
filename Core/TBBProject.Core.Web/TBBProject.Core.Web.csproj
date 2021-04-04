@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="HtmlSanitizer" Version="5.0.343" />
+    <PackageReference Include="NWebsec.AspNetCore.Core" Version="3.0.1" />
+    <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
+    <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="$(AspNetCoreMvcVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="$(MicrosoftExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis.Core" Version="1.0.3" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.2" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TBBProject.Core.Caching\TBBProject.Core.Caching.csproj" />
+    <ProjectReference Include="..\TBBProject.Core.Common\TBBProject.Core.Common.csproj" />
+    <ProjectReference Include="..\TBBProject.Core.Data.Domain\TBBProject.Core.Data.Domain.csproj" />
+    <ProjectReference Include="..\TBBProject.Core.Data\TBBProject.Core.Data.csproj" />
+    <ProjectReference Include="..\TBBProject.Core.Localization\TBBProject.Core.Localization.csproj" />
+    <ProjectReference Include="..\TBBProject.Core.Logging\TBBProject.Core.Logging.csproj" />
+    <ProjectReference Include="..\TBBProject.Core.Services\TBBProject.Core.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Files\" />
+  </ItemGroup>
+
+</Project>
