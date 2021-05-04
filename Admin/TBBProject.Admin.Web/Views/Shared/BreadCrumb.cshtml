@@ -12,7 +12,7 @@
                     for(var i=0;i<breadCount;i++)
                     {
                         <li class="breadcrumb-item">
-                            <a href="@breadTexts[(breadCount-1)-i].Url">@breadTexts[(breadCount-1)-i].Name</a>
+                            <a href="@breadTexts[(breadCount-1)-i].Url">@Localizer[breadTexts[(breadCount - 1) - i].Name].Value</a>
                         </li>
                     }
                 }

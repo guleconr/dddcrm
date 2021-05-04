@@ -16,8 +16,10 @@ namespace TBBProject.Core.DataContracts
         void UpdateAnnouncement(Announcement model);
 
         void DeleteAnnouncement(long Id);
-        IQueryable<Announcement> GetAnnouncementAllAsync();
-        IQueryable<AnnouncementLang> GetAnnouncementLangAllAsync(long announcementId);
+        void AppAnnouncement(long Id);
+
+        IQueryable<Announcement> GetAnnouncementAll();
+        IQueryable<AnnouncementLang> GetAnnouncementLangAll(long announcementId);
 
         AnnouncementLang GetAnnouncementLang(long announcementId);
 
@@ -30,6 +32,6 @@ namespace TBBProject.Core.DataContracts
 
         void UpdateAnnouncementLang(AnnouncementLang model);
 
-        void DeleteAnnouncementLang(AnnouncementLang model);
+        void DeleteAnnouncementLang(long Id);
     }
 }

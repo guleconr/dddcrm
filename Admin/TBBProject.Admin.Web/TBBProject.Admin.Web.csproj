@@ -18,10 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\AcademicSchedule\EditorTemplates\AcademicScheduleTemplate.cshtml" />
     <Content Remove="Views\Home\GoogleTest.cshtml" />
-    <Content Remove="Views\News\EditorTemplates\NewsTemplate.cshtml" />
-    <Content Remove="Views\VideoGallery\EditorTemplates\VideoGalleryTemplate.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,18 +59,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="libwkhtmltox.dylib">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="libwkhtmltox.so">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\AcademicSchedule\EditorTemplates\AcademicScheduleTemplate.cshtml" />
-    <None Include="Views\VideoGallery\EditorTemplates\VideoGalleryTemplate.cshtml" />
-    <None Include="Views\News\EditorTemplates\NewsTemplate.cshtml" />
-    <None Include="Views\Announcement\EditorTemplates\AnnouncementTemplate.cshtml" />
     <None Include="Views\Authority\Authority.cshtml" />
     <None Include="Views\Authority\AuthorityGridDiv.cshtml" />
     <None Include="Views\Authority\EditorTemplates\AuthorityUpdateView.cshtml" />
@@ -161,11 +154,6 @@
     <None Include="wwwroot\app-assets\js\plugins.min.min.js" />
     <None Include="wwwroot\app-assets\js\scripts\app-contacts.min.js" />
     <None Include="wwwroot\app-assets\js\scripts\customizer.min.js" />
-    <None Include="wwwroot\app-assets\js\search.min.js" />
-    <None Include="wwwroot\app-assets\js\toastr.js" />
-    <None Include="wwwroot\app-assets\js\toastr.min.js" />
-    <None Include="wwwroot\app-assets\js\vendors.js" />
-    <None Include="wwwroot\app-assets\js\vendors.min.js" />
     <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
     <None Include="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
     <None Include="wwwroot\lib\jquery-validation\additional-methods.js" />

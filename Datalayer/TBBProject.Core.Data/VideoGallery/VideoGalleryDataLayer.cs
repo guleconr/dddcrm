@@ -67,17 +67,18 @@ namespace TBBProject.Core.DataLayer
             _videoGallerylangRepository.Update(result);
             _uow.SaveChanges();
         }
-        public void DeleteVideoGalleryLang(VideoGalleryLang model)
+        public void DeleteVideoGalleryLang(long Id)
         {
-            var result = _videoGallerylangRepository.TableNoTracking.Where(i => i.Id == model.Id).FirstOrDefault();
+            var result = _videoGallerylangRepository.TableNoTracking.Where(i => i.Id == Id).FirstOrDefault();
             _videoGallerylangRepository.Delete(result);
             _uow.SaveChanges();
         }
-        public IQueryable<VideoGallery> GetVideoGalleryAllAsync()
+        public IQueryable<VideoGallery> GetVideoGalleryAll()
         {
-            return _videoGalleryRepository.TableNoTracking.Include(i => i.VideoGalleryLang).ThenInclude(i => i.Language);
+            return _videoGalleryRepository.TableNoTracking.Include(i => i.VideoGalleryLang).ThenInclude(i => i.Language).OrderByDescending(i => i.ReleaseDate);
+            
         }
-        public IQueryable<VideoGalleryLang> GetVideoGalleryLangAllAsync(long videoGalleryId)
+        public IQueryable<VideoGalleryLang> GetVideoGalleryLangAll(long videoGalleryId)
         {
             return _videoGallerylangRepository.TableNoTracking.Include(i => i.Language).Where(i => i.VideoGalleryId == videoGalleryId);
         }
@@ -89,7 +90,7 @@ namespace TBBProject.Core.DataLayer
 
         public VideoGallery GetVideoGalleryWithId(long videoGalleryId)
         {
-            return _videoGalleryRepository.TableNoTracking.Where(i => i.Id == videoGalleryId).FirstOrDefault();
+            return _videoGalleryRepository.TableNoTracking.Where(i => i.Id == videoGalleryId).Include(i=>i.VideoGalleryLang).ThenInclude(i=>i.Language).FirstOrDefault();
         }
     }
 }

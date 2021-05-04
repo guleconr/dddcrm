@@ -83,6 +83,18 @@ namespace TBBProject.Core.DataLayer.Account
             }
             return null;
         }
-
+        public IQueryable<Users> GetUsersByFilter(string name, string surname)
+        {
+            var result = _userRepository.TableNoTracking.Where(i=>i.Status==StatusEnum.Active);
+            if (!string.IsNullOrEmpty(name))
+            {
+                result = _userRepository.TableNoTracking.Where(i => i.Name.ToLower().Contains(name.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(surname))
+            {
+                result = _userRepository.TableNoTracking.Where(i => i.Surname.ToLower().Contains(surname.ToLower()));
+            }
+            return result;
+        }
     }
 }

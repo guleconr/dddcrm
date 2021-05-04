@@ -12,6 +12,6 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
         public string Name { get; set; }
         public byte[] Image { get; set; }
         public long NewsLangId { get; set; }
-        public NewsLangVM NewsLangVM { get; set; }
+        public NewsLangVM NewsLang { get; set; }
     }
 }

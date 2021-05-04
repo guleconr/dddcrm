@@ -130,3 +130,6 @@ div#grid {
 .k-numerictextbox .k-numeric-wrap .k-input {
   padding: 0px !important;
 }
+.k-checkbox {
+  display: none !important;
+}

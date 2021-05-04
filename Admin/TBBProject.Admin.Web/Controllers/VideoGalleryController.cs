@@ -31,12 +31,15 @@ namespace TBBProject.Admin.Web.Controllers
         private readonly IVideoGalleryBusiness _videoGalleryBusiness;
         private readonly IStringLocalizer<BaseController> _localizer;
         private readonly IAccountBusiness _accountBusiness;
-        public VideoGalleryController(IAccountBusiness accountBusiness, IVideoGalleryBusiness videoGalleryBusiness, IStringLocalizer<BaseController> localizer)
+        private readonly IDefinitionsBusiness _definitionBusiness;
+
+        public VideoGalleryController(IAccountBusiness accountBusiness, IVideoGalleryBusiness videoGalleryBusiness, IStringLocalizer<BaseController> localizer, IDefinitionsBusiness definitionBusiness)
                           : base(accountBusiness, localizer)
         {
             _videoGalleryBusiness = videoGalleryBusiness;
             _localizer = localizer;
             _accountBusiness = accountBusiness;
+            _definitionBusiness = definitionBusiness;
         }
 
 
@@ -55,15 +58,15 @@ namespace TBBProject.Admin.Web.Controllers
             return PartialView("VideoGalleryGridView", model);
         }
 
-        public JsonResult Get_VideoGallery([DataSourceRequest] DataSourceRequest request, DateTime ReleaseDate)
+        public JsonResult Get_VideoGallery([DataSourceRequest] DataSourceRequest request, string ReleaseDate, string EndDate)
         {
-            var result = _videoGalleryBusiness.GetVideoGalleryAllAsync(request, ReleaseDate);
+            var result = _videoGalleryBusiness.GetVideoGalleryAll(request, ReleaseDate, EndDate);
             return Json(result);
         }
 
         public JsonResult Get_VideoGalleryLang([DataSourceRequest] DataSourceRequest request, long videoGalleryId)
         {
-            var result = _videoGalleryBusiness.GetVideoGalleryLangAllAsync(request, videoGalleryId);
+            var result = _videoGalleryBusiness.GetVideoGalleryLangAll(request, videoGalleryId);
             return Json(result);
         }
 
@@ -77,10 +80,9 @@ namespace TBBProject.Admin.Web.Controllers
         [AcceptVerbs("Post")]
         public ActionResult EditingVideoGallery_Update(VideoGalleryVM videoGallery)
         {
-            if (videoGallery != null && ModelState.IsValid)
-            {
-                _videoGalleryBusiness.UpdateVideoGallery(videoGallery);
-            }
+
+            _videoGalleryBusiness.UpdateVideoGallery(videoGallery);
+
             return Content("");
         }
 
@@ -113,9 +115,9 @@ namespace TBBProject.Admin.Web.Controllers
         }
 
         [AcceptVerbs("Post")]
-        public ActionResult EditingVideoGalleryLang_Destroy([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<VideoGalleryLangVM> videoGallery)
+        public ActionResult EditingVideoGalleryLang_Destroy(long Id)
         {
-            _videoGalleryBusiness.DeleteVideoGalleryLang(videoGallery.FirstOrDefault());
+            _videoGalleryBusiness.DeleteVideoGalleryLang(Id);
             return Content("");
         }
 
@@ -139,6 +141,52 @@ namespace TBBProject.Admin.Web.Controllers
             VideoGalleryLangVM result = new VideoGalleryLangVM();
             result.VideoGalleryId = eventId;
             return PartialView(result);
+        }
+
+
+        public JsonResult Get_LanguageList(long videoGalleryId, long videoGalleryLangId)
+        {
+            var videoGallery = _videoGalleryBusiness.GetVideoGallery(videoGalleryId);
+            var result = _definitionBusiness.GetLanguageList();
+            for (int i = 0; i < videoGallery.VideoGalleryLang.Count; i++)
+            {
+                for (int l = 0; l < result.Count; l++)
+                {
+                    if (videoGallery.VideoGalleryLang[i].LanguageId == result[l].Id)
+                        result.RemoveAt(l);
+                }
+            }
+            if (result.Count == 0)
+            {
+                var lang = _videoGalleryBusiness.GetVideoGalleryLang(videoGalleryLangId);
+                result.Add(lang.Language);
+            }
+            return Json(result);
+        }
+
+        public JsonResult Get_LanguageListUpdate(long videoGalleryId, long videoGalleryLangId)
+        {
+            var vaideoGallery = _videoGalleryBusiness.GetVideoGallery(videoGalleryId);
+            var result = _definitionBusiness.GetLanguageList();
+            for (int i = 0; i < vaideoGallery.VideoGalleryLang.Count; i++)
+            {
+                for (int l = 0; l < result.Count; l++)
+                {
+                    if (vaideoGallery.VideoGalleryLang[i].LanguageId == result[l].Id)
+                        result.RemoveAt(l);
+                }
+            }
+            if (result.Count == 1)
+            {
+                result = _definitionBusiness.GetLanguageList();
+            }
+            if (result.Count == 0)
+            {
+                var lang = _videoGalleryBusiness.GetVideoGalleryLang(videoGalleryLangId);
+                result.Add(lang.Language);
+            }
+
+            return Json(result);
         }
 
     }

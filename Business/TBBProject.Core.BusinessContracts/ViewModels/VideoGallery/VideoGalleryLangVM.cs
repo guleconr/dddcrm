@@ -11,8 +11,10 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
         [Key]
         public long Id { get; set; }
         [Display(Name = LocalizationCaptions.Title)]
+        [Required(ErrorMessage = LocalizationCaptions.Required)]
         public string Title { get; set; }
-        [Display(Name = LocalizationCaptions.Url)]
+        [Display(Name = LocalizationCaptions.YoutubeUrl)]
+        [Required(ErrorMessage = LocalizationCaptions.Required)]
         public string Url { get; set; }
 
 

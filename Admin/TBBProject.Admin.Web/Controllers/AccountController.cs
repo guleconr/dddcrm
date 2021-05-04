@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Collections.Generic;
 using TBBProject.Core.BusinessContracts.ViewModels;
 using TBBProject.Core.Common.Extensions;
+using TBBProject.Core.Common;
 
 namespace TBBProject.Admin.Web
 {
@@ -62,6 +63,8 @@ namespace TBBProject.Admin.Web
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            if (TempData["SendMail"] != null)
+                ViewBag.Message = TempData["SendMail"].ToString();
             return View();
         }
 
@@ -112,7 +115,7 @@ namespace TBBProject.Admin.Web
                 }
                 else
                 {
-                    ModelState.AddModelError("Email", "Hatalı Email veya Şifre");
+                    ModelState.AddModelError("Email", LocalizationCaptions.EmailExists);
                     return View(model);
                 }
             }
@@ -171,7 +174,7 @@ namespace TBBProject.Admin.Web
                         _uow.SaveChanges();
                         if (selectedUser.IncorrectLoginCount >= 5)
                         {
-                            return RedirectToAction("ChangePassword", "Account");
+                            return RedirectToAction("ForgotPassword", "Account");
                         }
                     }
                     ModelState.AddModelError("Email", "Hatalı Email veya Şifre");
@@ -185,7 +188,7 @@ namespace TBBProject.Admin.Web
                 var user = _accountBusiness.GetUserByEmail(model.Email);
                 if (user != null && user.IsFirstLogin == true)
                 {
-                    return RedirectToAction("ChangePassword", "Account");
+                    return RedirectToAction("ForgotPassword", "Account");
                 }
             }
             return View(model);
@@ -204,15 +207,19 @@ namespace TBBProject.Admin.Web
             if (user != null)
             {
                 url += _encryptionService.Encrypt(user.Email);
+                TempData["SendMail"] = LocalizationCaptions.CheckEmailResetPassword;
                 _emailService.SendEmailAsync(user.Email, "Email Yenileme", url);
+                return RedirectToAction("Index", "Home", ViewBag);
             }
             else
             {
-                ModelState.AddModelError("Email", "Hatalı Email veya Şifre");
+                TempData["SendMail"] = "Hatalı Email";
+                ViewBag.Message = TempData["SendMail"].ToString();
+                ModelState.AddModelError("Email", LocalizationCaptions.EmailExists);
                 return View(model);
             }
 
-            return View(model);
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -237,7 +244,7 @@ namespace TBBProject.Admin.Web
                 }
                 else
                 {
-                    ModelState.AddModelError("Email", "Hatalı Email veya Şifre");
+                    ModelState.AddModelError("Email", LocalizationCaptions.EmailExists);
                     return View(model);
                 }
             }
@@ -266,7 +273,7 @@ namespace TBBProject.Admin.Web
             }
             else
             {
-                ModelState.AddModelError("Email", "Hatalı Email veya Şifre");
+                ModelState.AddModelError("Email", LocalizationCaptions.EmailExists);
                 return View(model);
             }
 

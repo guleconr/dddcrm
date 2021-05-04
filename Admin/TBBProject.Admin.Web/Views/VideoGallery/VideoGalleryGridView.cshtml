@@ -3,7 +3,8 @@
 @(Html.Kendo().Grid<VideoGalleryVM>()
     .Name("grid")
     .Columns(columns => {
-        columns.Bound(p => p.ReleaseDate).Filterable(false).Format("{0:dd.MM.yyyy}");
+        columns.Bound(p => p.TitleStr).Filterable(false);
+        columns.Bound(p => p.ReleaseDate).Filterable(false).Format("{0:dd/MM/yyyy}");
         columns.Bound(p => p.ReleaseDate).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateVideoGallery(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
         columns.Bound(p => p.ReleaseDate).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"addVideoGallery(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">add</i>");
         columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteVideoGallery(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
@@ -11,10 +12,11 @@
     })
     .ToolBar(toolbar =>
     {
+        toolbar.Search().Text(@Localizer[LocalizationCaptions.Search].Value);
         toolbar.Create().Text(@Localizer[LocalizationCaptions.AddNewRecord].Value);
     })
-     .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title("Video Galeri Ekle"))
-                        .TemplateName("VideoGalleryTemplate").ConfirmDelete("Kaydı silmek için onaylayınız!").DisplayDeleteConfirmation("Kaydı silmek istediğinize eminmisiniz!!"))
+     .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title(@Localizer[LocalizationCaptions.AddVideoGallery].Value))
+                        .TemplateName("VideoGallerTemplate").ConfirmDelete(@Localizer[LocalizationCaptions.ApproveForDelete].Value).DisplayDeleteConfirmation(@Localizer[LocalizationCaptions.AreYouSureDelete].Value))
 
     .Scrollable()
     .HtmlAttributes(new { style = "height:800px;" })
@@ -31,8 +33,9 @@
             .Create("EditingVideoGallery_Create", "VideoGallery")
             .Update("EditingVideoGallery_Update", "VideoGallery")
             .Destroy("EditingVideoGallery_Destroy", "VideoGallery")
-            .Read(read => read.Action("Get_VideoGallery", "VideoGallery", new { ReleaseDate = Model.ReleaseDateSearch })))
+            .Read(read => read.Action("Get_VideoGallery", "VideoGallery", new { ReleaseDate = Model.ReleaseDateSearchStr, EndDate = Model.EndDateSearchStr })))
             .Events(events => events.DataBound("dataBound"))
+                        .Pageable()
 
     )
 
@@ -45,7 +48,8 @@
                 columns.Bound(p => p.Title).Filterable(false);
                 columns.Bound(p => p.Url).Filterable(false);
                 columns.Bound(p => p.Language.Name).Filterable(false);
-                columns.Bound(p => p.Url).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateVideoGalleryLang(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+                columns.Bound(p => p.Url).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateVideoGalleryLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+                columns.Bound(p => p.Url).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteVideoGalleryLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
 
             })
 
@@ -66,9 +70,3 @@
     )
 </script>
 
-
-
-<script>
-
-
-</script>

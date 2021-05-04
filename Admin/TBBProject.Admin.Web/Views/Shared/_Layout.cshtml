@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <head>
@@ -17,7 +16,6 @@
     <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/vertical-modern-menu-template/style.min.css">
     <link href="~/lib/kendoui/styles/kendo.common-bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/kendoui/styles/kendo.bootstrap-v4.min.css" rel="stylesheet" />
-    <script src="~/app-assets/js/toastr.min.js"></script>
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/app-assets/js/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/app-assets/js/toastr.min.js"></script>
@@ -27,13 +25,13 @@
     <script src="~/lib/jquery-validation/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="~/app-assets/js/custom/custom-script.min.js"></script>
-    <script src='~/lib/kendoui/js/cultures/kendo.culture.tr-TR.min.js'></script>
-    <script src='~/lib/kendoui/js/messages/kendo.messages.tr-TR.min.js'></script>
     <link href="~/app-assets/css/style.min.css" rel="stylesheet" />
     <link href="~/app-assets/css/toastr/toastr.min.css" rel="stylesheet" />
     <script src="~/app-assets/js/main.js"></script>
+    <script src='~/@ViewBag.LanguageStr'></script>
+    <script src='~/@ViewBag.LanguageStrMsg'></script>
     <script type="text/javascript">
-        kendo.culture("tr-TR");
+        kendo.culture("@ViewBag.Language");
     </script>
 </head>
 <body class="vertical-layout vertical-menu-collapsible page-header-dark vertical-modern-menu preload-transitions 2-columns   " data-open="click" data-menu="vertical-modern-menu" data-col="2-columns">
@@ -77,7 +75,6 @@
         <div class="brand-sidebar">
             <h1 class="logo-wrapper">
                 <a class="brand-logo darken-1" href="/">
-                    @*<img class="hide-on-med-and-down" src="/app-assets/images/logo1.png" alt="Logo" />*@
                     <span class="logo-text hide-on-med-and-down">TBB</span>
                 </a>
                 <a class="navbar-toggler" href="#"><i class="material-icons">radio_button_checked</i></a>
@@ -117,7 +114,7 @@
             toastr.options = {
                 "closeButton": false,
                 "debug": false,
-                "positionClass": "toast-top-right",
+                "positionClass": "toast-bottom-right",
                 "onclick": null,
                 "showDuration": "300",
                 "hideDuration": "1000",

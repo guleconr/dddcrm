@@ -5,39 +5,52 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <div class="card">
-                <form action="/login" id="loginForm" method="post" class="box">
-                    <h1>TBB Giriş</h1>
-                    <p class="text-muted"> Kullanıcı Adı ve Şifrenizi Giriniz.</p>
-                    <input type="text" id="Email" name="Email" data-val-email="Email" placeholder="Email">
-                    <input data-val="true" data-val-required="Required" id="Password" name="Password" type="password" placeholder="Şifre">
-                    <a class="forgot text-muted" href="/ForgotPassword">Şifremi Unuttum?</a>
-                    <dnt-captcha asp-captcha-generator-max="999999"
-                                 asp-captcha-generator-min="111111"
-                                 asp-captcha-generator-language="Turkish"
-                                 asp-captcha-generator-display-mode="ShowDigits"
-                                 asp-use-relative-urls="true"
-                                 asp-placeholder="Captcha Giriniz"
-                                 asp-validation-error-message="Please enter the security code."
-                                 asp-font-name="Tahoma"
-                                 asp-font-size="20"
-                                 asp-fore-color="#333333"
-                                 asp-back-color="#ccc"
-                                 asp-text-box-class="text-box form-control"
-                                 asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text'></span></span>{0}"
-                                 asp-validation-message-class="text-danger"
-                                 asp-refresh-button-class="fas fa-redo btn-sm"
-                                 asp-use-noise="false" />
+            <form asp-controller="Account" asp-action="login" id="loginForm" class="box">
+                <h1>@Localizer[LocalizationCaptions.TbbLogin].Value</h1>
+                <p class="text-muted"> @Localizer[LocalizationCaptions.UsernamePass].Value</p>
+                @Html.TextBoxFor(i => i.Email, new { placeholder = @Localizer[LocalizationCaptions.Email].Value, @class = "form-input" })
+                @Html.ValidationMessageFor(i => i.Email)
+                @Html.TextBoxFor(i => i.Password, new { type = "password", placeholder = @Localizer[LocalizationCaptions.Password].Value })
+                @Html.ValidationMessageFor(i => i.Password)
+                <div class="col s12" style="text-align:center">
 
-                    <div class="row">
-                        <div class="col-8">
+                    <a class="forgot text-muted" href="/ForgotPassword">@Localizer[LocalizationCaptions.ForgotPassword].Value</a>
+                </div>
 
-                        </div>
-                        <input type="submit" name="" value="Giriş">
+                @*<dnt-captcha asp-captcha-generator-max="999999"
+        asp-captcha-generator-min="111111"
+        asp-captcha-generator-language="Turkish"
+        asp-captcha-generator-display-mode="ShowDigits"
+        asp-use-relative-urls="true"
+        asp-placeholder="Captcha Giriniz"
+        asp-validation-error-message="Please enter the security code."
+        asp-font-name="Tahoma"
+        asp-font-size="20"
+        asp-fore-color="#333333"
+        asp-back-color="#ccc"
+        asp-text-box-class="text-box form-control"
+        asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text'></span></span>{0}"
+        asp-validation-message-class="text-danger"
+        asp-refresh-button-class="fas fa-redo btn-sm"
+        asp-use-noise="false" />*@
+
+                <div class="row">
+                    <div class="col-8">
+
                     </div>
+                    <input type="submit" name="" value="@Localizer[LocalizationCaptions.Login].Value">
+                </div>
 
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                var message = '@ViewBag.Message';
+                toastr.info(message);
+            };
+    </script>
+}

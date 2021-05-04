@@ -26,7 +26,12 @@ namespace TBBProject.Core.Business.Account
 
         }
 
-
+        public DataSourceResult GetUsersByFilter([DataSourceRequest] DataSourceRequest request, string name, string surname)
+        {
+            var result = _accountDataLayer.GetUsersByFilter(name, surname).ToDataSourceResult(request);
+            result.Data = _mapper.Map<List<UserVM>>(result.Data);
+            return result;
+        }
         public UserVM GetUser(string username, string password)
         {
             var selectedUser = _accountDataLayer.GetUser(username, password);

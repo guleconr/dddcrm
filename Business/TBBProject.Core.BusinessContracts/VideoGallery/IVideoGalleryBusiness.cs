@@ -9,8 +9,8 @@ namespace TBBProject.Core.BusinessContracts
 {
     public interface IVideoGalleryBusiness
     {
-        DataSourceResult GetVideoGalleryAllAsync([DataSourceRequest] DataSourceRequest request, DateTime ReleaseDate);
-        DataSourceResult GetVideoGalleryLangAllAsync([DataSourceRequest] DataSourceRequest request, long videoGalleryId);
+        DataSourceResult GetVideoGalleryAll([DataSourceRequest] DataSourceRequest request, string ReleaseDate, string EndDate);
+        DataSourceResult GetVideoGalleryLangAll([DataSourceRequest] DataSourceRequest request, long videoGalleryId);
 
         VideoGalleryLangVM GetVideoGalleryLang(long videoGalleryId);
         VideoGalleryVM GetVideoGallery(long videoGalleryId);
@@ -24,6 +24,6 @@ namespace TBBProject.Core.BusinessContracts
 
         void CreateVideoGalleryLang(VideoGalleryLangVM videoGallery);
         void UpdateVideoGalleryLang(VideoGalleryLangVM videoGallery);
-        void DeleteVideoGalleryLang(VideoGalleryLangVM videoGallery);
+        void DeleteVideoGalleryLang(long Id);
     }
 }

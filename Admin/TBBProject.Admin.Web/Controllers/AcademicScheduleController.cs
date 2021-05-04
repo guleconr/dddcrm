@@ -31,12 +31,15 @@ namespace TBBProject.Admin.Web.Controllers
         private readonly IAcademicScheduleBusiness _academicScheduleBusiness;
         private readonly IStringLocalizer<BaseController> _localizer;
         private readonly IAccountBusiness _accountBusiness;
-        public AcademicScheduleController(IAccountBusiness accountBusiness, IAcademicScheduleBusiness academicScheduleBusiness, IStringLocalizer<BaseController> localizer)
+        private readonly IDefinitionsBusiness _definitionBusiness;
+
+        public AcademicScheduleController(IAccountBusiness accountBusiness, IAcademicScheduleBusiness academicScheduleBusiness, IStringLocalizer<BaseController> localizer, IDefinitionsBusiness definitionBusiness)
                           : base(accountBusiness, localizer)
         {
             _academicScheduleBusiness = academicScheduleBusiness;
             _localizer = localizer;
             _accountBusiness = accountBusiness;
+            _definitionBusiness = definitionBusiness;
         }
 
 
@@ -55,15 +58,15 @@ namespace TBBProject.Admin.Web.Controllers
             return PartialView("AcademicScheduleGridView", model);
         }
 
-        public JsonResult Get_AcademicSchedule([DataSourceRequest] DataSourceRequest request, DateTime ReleaseDate)
+        public JsonResult Get_AcademicSchedule([DataSourceRequest] DataSourceRequest request, string ReleaseDate,string EndDate)
         {
-            var result = _academicScheduleBusiness.GetAcademicScheduleAllAsync(request, ReleaseDate);
+            var result = _academicScheduleBusiness.GetAcademicScheduleAll(request, ReleaseDate, EndDate);
             return Json(result);
         }
 
         public JsonResult Get_AcademicScheduleLang([DataSourceRequest] DataSourceRequest request, long academicScheduleId)
         {
-            var result = _academicScheduleBusiness.GetAcademicScheduleLangAllAsync(request, academicScheduleId);
+            var result = _academicScheduleBusiness.GetAcademicScheduleLangAll(request, academicScheduleId);
             return Json(result);
         }
 
@@ -77,10 +80,9 @@ namespace TBBProject.Admin.Web.Controllers
         [AcceptVerbs("Post")]
         public ActionResult EditingAcademicSchedule_Update(AcademicScheduleVM academicSchedule)
         {
-            if (academicSchedule != null && ModelState.IsValid)
-            {
-                _academicScheduleBusiness.UpdateAcademicSchedule(academicSchedule);
-            }
+
+            _academicScheduleBusiness.UpdateAcademicSchedule(academicSchedule);
+
             return Content("");
         }
 
@@ -113,9 +115,9 @@ namespace TBBProject.Admin.Web.Controllers
         }
 
         [AcceptVerbs("Post")]
-        public ActionResult EditingAcademicScheduleLang_Destroy([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<AcademicScheduleLangVM> academicSchedule)
+        public ActionResult EditingAcademicScheduleLang_Destroy(long Id)
         {
-            _academicScheduleBusiness.DeleteAcademicScheduleLang(academicSchedule.FirstOrDefault());
+            _academicScheduleBusiness.DeleteAcademicScheduleLang(Id);
             return Content("");
         }
 
@@ -139,6 +141,46 @@ namespace TBBProject.Admin.Web.Controllers
             AcademicScheduleLangVM result = new AcademicScheduleLangVM();
             result.AcademicScheduleId = eventId;
             return PartialView(result);
+        }
+
+        public JsonResult Get_LanguageList(long academicScheduleId)
+        {
+            var academicSchedule = _academicScheduleBusiness.GetAcademicSchedule(academicScheduleId);
+            var result = _definitionBusiness.GetLanguageList();
+            for (int i = 0; i < academicSchedule.AcademicScheduleLang.Count; i++)
+            {
+                for (int l = 0; l < result.Count; l++)
+                {
+                    if (academicSchedule.AcademicScheduleLang[i].LanguageId == result[l].Id)
+                        result.RemoveAt(l);
+                }
+            }
+            return Json(result);
+        }
+
+        public JsonResult Get_LanguageListUpdate(long academicScheduleId, long academicScheduleLangId)
+        {
+            var academicSchedule = _academicScheduleBusiness.GetAcademicSchedule(academicScheduleId);
+            var result = _definitionBusiness.GetLanguageList();
+            for (int i = 0; i < academicSchedule.AcademicScheduleLang.Count; i++)
+            {
+                for (int l = 0; l < result.Count; l++)
+                {
+                    if (academicSchedule.AcademicScheduleLang[i].LanguageId == result[l].Id)
+                        result.RemoveAt(l);
+                }
+            }
+            if (result.Count == 1)
+            {
+                result = _definitionBusiness.GetLanguageList();
+            }
+            if (result.Count == 0)
+            {
+                var lang = _academicScheduleBusiness.GetAcademicScheduleLang(academicScheduleLangId);
+                result.Add(lang.Language);
+            }
+
+            return Json(result);
         }
 
     }

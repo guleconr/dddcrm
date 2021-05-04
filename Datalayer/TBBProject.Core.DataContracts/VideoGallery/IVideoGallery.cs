@@ -16,8 +16,8 @@ namespace TBBProject.Core.DataContracts
         void UpdateVideoGallery(VideoGallery model);
 
         void DeleteVideoGallery(long Id);
-        IQueryable<VideoGallery> GetVideoGalleryAllAsync();
-        IQueryable<VideoGalleryLang> GetVideoGalleryLangAllAsync(long VideoGalleryId);
+        IQueryable<VideoGallery> GetVideoGalleryAll();
+        IQueryable<VideoGalleryLang> GetVideoGalleryLangAll(long VideoGalleryId);
 
         VideoGalleryLang GetVideoGalleryLang(long VideoGalleryId);
 
@@ -27,6 +27,6 @@ namespace TBBProject.Core.DataContracts
 
         void UpdateVideoGalleryLang(VideoGalleryLang model);
 
-        void DeleteVideoGalleryLang(VideoGalleryLang model);
+        void DeleteVideoGalleryLang(long Id);
     }
 }

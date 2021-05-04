@@ -1,10 +1,11 @@
 @model AnnouncementVM
-
 @(Html.Kendo().Grid<AnnouncementVM>()
     .Name("grid")
     .Columns(columns => {
-        columns.Bound(p => p.AnnouncementTypeStr).Filterable(false);
-        columns.Bound(p => p.ReleaseDate).Filterable(false).Format("{0:dd.MM.yyyy}");
+        columns.Bound(p => p.TitleStr).Filterable(false);
+        columns.Bound(p => p.ReleaseDate).Filterable(false).Format("{0:dd/MM/yyyy}");
+        columns.Bound(p => p.EndReleaseDate).Filterable(false).Format("{0:dd/MM/yyyy}");
+
         columns.Bound(p => p.IsReleaseStr).Filterable(false);
         columns.Bound(p => p.ApprovalStatusStr).Filterable(false);
         columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
@@ -12,13 +13,13 @@
         columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
 
     })
-    .ToolBar(toolbar =>
-    {
-        toolbar.Create().Text(@Localizer[LocalizationCaptions.AddNewRecord].Value);
-    })
-     .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title("Duyuru Ekle"))
-                        .TemplateName("AnnouncementTemplate").ConfirmDelete("Kaydı silmek için onaylayınız!").DisplayDeleteConfirmation("Kaydı silmek istediğinize eminmisiniz!!"))
-
+        .ToolBar(toolbar =>
+        {
+            toolbar.Search().Text(@Localizer[LocalizationCaptions.Search].Value);
+            toolbar.Custom()
+            .Text(@Localizer[LocalizationCaptions.AddNewRecord].Value).
+            HtmlAttributes(new { onclick = "createAnn()" });
+        })
     .Scrollable()
     .HtmlAttributes(new { style = "height:800px;" })
     .ClientDetailTemplateId("ChildGrid")
@@ -34,8 +35,9 @@
             .Create("EditingAnnouncement_Create", "Announcement")
             .Update("EditingAnnouncement_Update", "Announcement")
             .Destroy("EditingAnnouncement_Destroy", "Announcement")
-            .Read(read => read.Action("Get_Announcement", "Announcement", new { IsRelease = Model.IsReleaseSearch, ReleaseDate = Model.ReleaseDateSearch, AnnouncementType = Model.AnnouncementTypeIdSearch })))
+            .Read(read => read.Action("Get_Announcement", "Announcement", new { IsRelease = Model.IsReleaseSearch, ReleaseDate = Model.ReleaseDateSearchStr, EndDate = Model.EndDateSearchStr, ApprovalStatus = Model.ApprovalStatusSearch })))
             .Events(events => events.DataBound("dataBound"))
+                        .Pageable()
 
     )
 
@@ -46,12 +48,13 @@
             .Columns(columns =>
             {
                 columns.Bound(p => p.Title).Filterable(false);
-                columns.Bound(p => p.Content).Filterable(false);
                 columns.Bound(p => p.Language.Name).Filterable(false);
-                columns.Bound(p => p.Content).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAnnouncementLang(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+                columns.Bound(p => p.User.Name).Filterable(false);
+
+                columns.Bound(p => p.Content).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAnnouncementLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+                columns.Bound(p => p.Content).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteAnnouncementLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
 
             })
-
             .DataSource(dataSource => dataSource
                 .Ajax()
                 .PageSize(10)
@@ -67,11 +70,6 @@
             .Sortable()
             .ToClientTemplate()
     )
-</script>
-
-
-
-<script>
 
 
 </script>

@@ -11,8 +11,9 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
         [Key]
         public long Id { get; set; }
         [Display(Name = LocalizationCaptions.Title)]
+        [Required(ErrorMessage = LocalizationCaptions.Required)]
         public string Title { get; set; }
-        [Display(Name = LocalizationCaptions.Url)]
+        [Display(Name = LocalizationCaptions.AscheduleUrl)]
         public string Url { get; set; }
 
 
@@ -21,6 +22,9 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
         [Display(Name = LocalizationCaptions.Language)]
         public long LanguageId { get; set; }
         public LanguageVM Language { get; set; }
+
+        [Display(Name = LocalizationCaptions.Title)]
+        public string TitleStr { get; set; }
 
     }
 }

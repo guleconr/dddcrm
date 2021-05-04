@@ -8,25 +8,25 @@
                   data-ajax-mode="replace"
                   data-ajax-update="#content">
                 <div class="row">
-                    <div class="col s4">
+                    <div class="col s6">
                         <div class="editor-label">
-                            @Html.LabelFor(i => i.StartDate)
+                            @Html.LabelFor(i => i.StartDateSearch)
                         </div>
                         <div class="editor-field">
-                            @(Html.Kendo().DatePickerFor(i=>i.StartDate).Culture("tr-TR")
-                .Value(DateTime.Now).Format("{0:dd.MM.yyyy}")
+                            @(Html.Kendo().DatePickerFor(i=>i.StartDateSearch)
+                        .Value(DateTime.Now.AddDays(-30)).Format("{0:dd.MM.yyyy}").Events(i => i.Change("dateChange"))
                 .HtmlAttributes(new { style = "width: 100%" })
                 .DateInput()
             )
                         </div>
                     </div>
-                    <div class="col s4">
+                    <div class="col s6">
                         <div class="editor-label">
-                            @Html.LabelFor(i => i.EndDate)
+                            @Html.LabelFor(i => i.EndDateSearch)
                         </div>
                         <div class="editor-field">
-                            @(Html.Kendo().DatePickerFor(i=>i.EndDate).Culture("tr-TR")
-                .Value(DateTime.Now).Format("{0:dd.MM.yyyy}")
+                            @(Html.Kendo().DatePickerFor(i=>i.EndDateSearch)
+                            .Value(DateTime.Now.AddDays(1)).Format("{0:dd.MM.yyyy}").Events(i => i.Change("enddateChange"))
                 .HtmlAttributes(new { style = "width: 100%" })
                 .DateInput()
             )
@@ -35,7 +35,7 @@
                 </div>
                 <div class="row" style="padding-bottom:20px;">
                 </div>
-                <div class="row">
+                <div class="row" style="padding-bottom:15px;">
                     <div class="col s8">
 
                     </div>
@@ -50,6 +50,8 @@
                         </button>
                     </div>
                 </div>
+                @Html.HiddenFor(i => i.StartDateSearchStr)
+                @Html.HiddenFor(i => i.EndDateSearchStr)
             </form>
             <div id="content">
 
@@ -65,40 +67,67 @@
         $('#popupWindowDiv').load('/AcademicScheduleAdd/' + e);
         $("#windowPopUp").data("kendoWindow").open();
         $("#windowPopUp").data("kendoWindow").setOptions({
-            title: "Akademik Takvim Ekle"
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.AddAcademicSchedule].Value))"
         });
     }
     function updateAcademicSchedule(e) {
-        $('#popupWindowDiv').load('/AcademicScheduleUpdate/'+e);
+        $('#popupWindowDiv').load('/AcademicScheduleUpdate/' + e);
         $("#windowPopUp").data("kendoWindow").open();
         $("#windowPopUp").data("kendoWindow").setOptions({
-            title: "Akademik Takvim Düzenle"
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.UpdateAcademicSchedule].Value))"
         });
     }
 
     function deleteAcademicSchedule(e) {
-        debugger;
-        $.ajax({
-            type: "POST",
-            url: "/AcademicSchedule/EditingAcademicSchedule_Destroy",
-            data: {
-                'Id': e,
-            },
-            failure: function (response) {
-                alert(response.responseText);
-            },
-            error: function (response) {
-                alert(response.responseText);
-            }
-        });
-        $("#AcademicScheduleForm").submit();
+        var result = confirm("@(Html.Raw( Localizer[LocalizationCaptions.ConfirmDelete].Value))");
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "/AcademicSchedule/EditingAcademicSchedule_Destroy",
+                data: {
+                    'Id': e,
+                },
+                failure: function (response) {
+                },
+                error: function (response) {
+                },
+                success: function (response) {
+                    $("#AcademicScheduleForm").submit();
+                }
+            });
+        }
+
+    }
+
+
+
+    function deleteAcademicScheduleLang(e) {
+        var result = confirm("@(Html.Raw( Localizer[LocalizationCaptions.ConfirmDelete].Value))");
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "/AcademicSchedule/EditingAcademicScheduleLang_Destroy",
+                data: {
+                    'Id': e,
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (response) {
+                    $("#AcademicScheduleForm").submit();
+                }
+            });
+        }
     }
 
     function updateAcademicScheduleLang(e) {
         $('#popupWindowDiv').load('/AcademicScheduleLangUpdate/' + e);
         $("#windowPopUp").data("kendoWindow").open();
         $("#windowPopUp").data("kendoWindow").setOptions({
-            title: "Akademik Takvim Dil Düzenle"
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.UpdateAcademicSchedule].Value))"
         });
     }
 
@@ -113,8 +142,17 @@
         $("#AcademicScheduleForm").submit();
     });
     $(document).ready(function () {
+        $('#StartDateSearchStr').val($('#StartDateSearch').val()).trigger("change");
+        $('#EndDateSearchStr').val($('#EndDateSearch').val()).trigger("change");
         $("#AcademicScheduleForm").submit();
     });
+
+    function dateChange(e) {
+        $('#StartDateSearchStr').val(e.sender._oldText).trigger("change");
+    }
+    function enddateChange(e) {
+        $('#EndDateSearchStr').val(e.sender._oldText).trigger("change");
+    }
     function dataBound() {
         this.expandRow(this.tbody.find("tr.k-master-row").first());
     }

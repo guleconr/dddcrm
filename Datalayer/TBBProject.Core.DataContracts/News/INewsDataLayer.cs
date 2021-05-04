@@ -16,8 +16,10 @@ namespace TBBProject.Core.DataContracts
         void UpdateNews(News model);
 
         void DeleteNews(long Id);
-        IQueryable<News> GetNewsAllAsync();
-        IQueryable<NewsLang> GetNewsLangAllAsync(long NewsId);
+        void AppNews(long Id);
+
+        IQueryable<News> GetNewsAll();
+        IQueryable<NewsLang> GetNewsLangAll(long NewsId);
 
         NewsLang GetNewsLang(long NewsId);
 
@@ -27,6 +29,6 @@ namespace TBBProject.Core.DataContracts
 
         void UpdateNewsLang(NewsLang model);
 
-        void DeleteNewsLang(NewsLang model);
+        void DeleteNewsLang(long Id);
     }
 }

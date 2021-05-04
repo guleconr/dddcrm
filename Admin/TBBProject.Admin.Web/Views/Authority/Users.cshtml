@@ -19,13 +19,13 @@
 
 <div class="card animate fadeUp">
     <div class="card-move-up waves-effect waves-block waves-light">
-        <div class="move-up white darken-1" style="min-height:500px;">
+        <div class="move-up white darken-1" style="min-height:750px;">
             <form asp-controller="Authority" asp-action="UserSearchPost" id="UserSearchForm"
                   data-ajax="true"
                   data-ajax-method="POST"
                   data-ajax-mode="replace"
                   data-ajax-update="#content">
-                <div class="row">
+                <div class="row" style="padding-bottom:20px;">
                     <div class="col s6">
                         <div class="editor-label">
                             @Html.LabelFor(model => model.NameSearch)
@@ -69,48 +69,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col s6">
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.UserTypeSearch)
-                        </div>
-                        <div class="editor-field">
-                            @(Html.Kendo().DropDownListFor(i=>i.UserTypeSearch)
-                              .DataTextField("Name")
-                              .DataValueField("Id")
-                              .Value("1")
-                              .DataSource(source => {
-                                  source.Read(read =>
-                                  {
-                                      read.Action("Get_UserTypeEnumList", "Definitions");
-                                  });
-                              })
-                              .HtmlAttributes(new { style = "width: 100%" })
-                        )
-                        </div>
-                    </div>
-                    <div class="col s6">
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.EmailSearch)
-                        </div>
-                        <div class="editor-field">
-                            @(Html.Kendo().AutoCompleteFor(i=>i.EmailSearch)
-                          .DataTextField("Email")
-                          .Filter("contains")
-                          .MinLength(3)
-                          .HtmlAttributes(new { style = "width:100%" })
-                          .DataSource(source =>
-                                  {
-                              source.Read(read =>
-                              {
-                                  read.Action("ServerFiltering_UsersEmail", "Authority").Data("onAdditionalDataEmail");
-                              })
-                              .ServerFiltering(true);
-                          })
-                    )
-                        </div>
-                    </div>
-                </div><br />
                 <div class="row">
                     <div class="col s12">
                         <button id="refresh-Button" type="submit" class="btn btn-block">@Localizer[LocalizationCaptions.Search].Value</button>

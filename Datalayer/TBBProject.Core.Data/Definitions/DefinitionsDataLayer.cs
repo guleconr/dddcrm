@@ -60,6 +60,7 @@ namespace TBBProject.Core.DataLayer
             return await _resourceRepository.TableNoTracking.ToListAsync();
         }
         #endregion
+
         #region Announcement
         public IQueryable<AnnouncementType> GetAnnouncement()
         {
@@ -96,6 +97,7 @@ namespace TBBProject.Core.DataLayer
             return await _announcementTypeRepository.TableNoTracking.ToListAsync();
         }
         #endregion
+
         #region Icons
         public async Task<List<Icons>> GetIconsAsync()
         {
@@ -103,5 +105,38 @@ namespace TBBProject.Core.DataLayer
         }
         #endregion
 
+        #region Languages
+        public IQueryable<Language> GetLanguages()
+        {
+            var result = _languageRepository.TableNoTracking;
+            return result;
+        }
+
+        public void CreateLanguages(Language model)
+        {
+            _languageRepository.Insert(model);
+            _uow.SaveChanges();
+        }
+        public void UpdateLanguages(Language model)
+        {
+            var result = _languageRepository.TableNoTracking.Where(i => i.Id == model.Id).FirstOrDefault();
+            result.Name = model.Name;
+            result.Region = model.Region;
+            result.Country = model.Country;
+            result.CultureName = model.CultureName;
+            _languageRepository.Update(result);
+            _uow.SaveChanges();
+        }
+        public void DeleteLanguages(Language model)
+        {
+            var result = _languageRepository.TableNoTracking.Where(i => i.Id == model.Id).FirstOrDefault();
+            _languageRepository.Delete(result);
+            _uow.SaveChanges();
+        }
+        public async Task<List<Language>> GetLanguagesAllAsync()
+        {
+            return await _languageRepository.TableNoTracking.ToListAsync();
+        }
+        #endregion
     }
 }

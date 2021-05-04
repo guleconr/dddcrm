@@ -1,0 +1,169 @@
+@model NewsLangVM
+
+<script>
+    $(function () {
+        $("form").kendoValidator();
+        $("#buttonCancel").click(function () {
+            $("#windowPopUp").data("kendoWindow").close();
+        });
+    });
+    function completed() {
+        $("#windowPopUp").data("kendoWindow").close();
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+</script>
+<form asp-controller="News" asp-action="EditingNewsLang_Update" id="NewsLangUpdateForm"
+      data-ajax="true"
+      data-ajax-complete="completed"
+      data-ajax-method="POST">
+    <div class="row" style="min-width:750px;">
+        <div class="col s12">
+            <div class="form-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LanguageId)
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DropDownListFor(p=>p.LanguageId)
+                                    .HtmlAttributes(new { style = "width:100%" })
+                                    .OptionLabel(@Localizer[LocalizationCaptions.SelectLanguage].Value)
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("Get_LanguageListUpdate", "News", new { newsId = Model.NewsId,newsLangId = Model.Id });
+                                        });
+                                    }))
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Title)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(i => i.Title, new { @class = "k-textbox", style = "width:100%" })
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.HeadLine)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(i => i.HeadLine, new { @class = "k-textbox", style = "width:100%" })
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Content)
+                </div>
+                <div class="editor-field" style="padding-bottom:15px">
+                    @(Html.Kendo().EditorFor(p => p.Content)
+          .HtmlAttributes(new { style = "width: 100%; height:500px", aria_label = "editor" })
+            .Tools(tools => tools
+            .Clear()
+            .Bold().Italic().Underline()
+            .JustifyLeft().JustifyCenter().JustifyRight()
+            .InsertUnorderedList().InsertOrderedList()
+            .Outdent().Indent()
+            .CreateLink().Unlink()
+            .InsertImage()
+            .TableEditing()
+            .FontName()
+            .FontSize()
+            .ForeColor().BackColor()
+            )
+            .ImageBrowser(imageBrowser => imageBrowser
+            .Image("~/shared/UserFiles/Images/{0}")
+            .Read("Read", "ImageBrowser")
+            .Create("Create", "ImageBrowser")
+            .Destroy("Destroy", "ImageBrowser")
+            .Upload("Upload", "ImageBrowser")
+            )
+         )
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.NewsImageForm)
+                </div>
+                <div class="editor-field">
+                    <div class="col s12" style="padding:0">
+                        @(Html.Kendo().Upload()
+                    .Name("NewsImageForm")
+                    .Multiple(false)
+                    .Validation(validation => validation.AllowedExtensions(new string[] { ".gif", ".jpg", ".jpeg", ".png" ,"tiff" }))
+                    .Validation(validation => validation.MaxFileSize(3145728))
+                    )
+                    </div>
+                    <div class="col s12" style="padding:0;padding-bottom: 15px;">
+                        @if (Model.NewsImageForm != null)
+                        {
+                            <ul id="existing-files" class="k-upload-files k-reset">
+                                <li data-att-id="@Model.NewsImageForm.Name">
+                                    <span class="k-filename" title="@Model.NewsImageForm.Name">@Model.NewsImageForm.Name</span>
+                                </li>
+                            </ul>
+                        }
+                    </div>
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.SliderImageForm)
+                </div>
+                <div class="editor-field">
+                    <div class="col s12" style="padding:0">
+                        @(Html.Kendo().Upload()
+                    .Name("SliderImageForm")
+                    .Multiple(false)
+                    .Validation(validation => validation.AllowedExtensions(new string[] { ".gif", ".jpg", ".jpeg", ".png" ,"tiff" }))
+                    .Validation(validation => validation.MaxFileSize(3145728))
+                    )
+                    </div>
+                    <div class="col s12" style="padding:0;padding-bottom: 15px;">
+                        @if (Model.SliderImageForm != null)
+                        {
+                            <ul id="existing-files" class="k-upload-files k-reset">
+                                <li data-att-id="@Model.SliderImageForm.Name">
+                                    <span class="k-filename" title="@Model.SliderImageForm.Name">@Model.SliderImageForm.Name</span>
+                                </li>
+                            </ul>
+                        }
+                    </div>
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.NewsGalleryForm)
+                </div>
+                <div class="editor-field">
+                    <div class="col s12" style="padding:0">
+                        @(Html.Kendo().Upload()
+                    .Name("NewsGalleryForm")
+                    .Multiple(true)
+                    .Validation(validation => validation.AllowedExtensions(new string[] { ".gif", ".jpg", ".jpeg", ".png" ,"tiff" }))
+                    .Validation(validation => validation.MaxFileSize(3145728))
+                    )
+                    </div>
+                    <div class="col s12" style="padding:0;padding-bottom: 15px;">
+                        @if (Model.NewsGalleryForm != null && Model.NewsGalleryForm.Count > 0)
+                        {
+                            <ul id="existing-files" class="k-upload-files k-reset">
+                                @foreach (var file in Model.NewsGalleryForm)
+                                {
+                                    <li data-att-id="@file.Name">
+                                        <span class="k-filename" title="@file.Name">@file.Name</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s6">
+            <button class="buttonClear" id="buttonCancel" type="button">
+                @Localizer[LocalizationCaptions.Cancel].Value
+            </button>
+        </div>
+        <div class="col s6">
+            <button class="buttonConfirm" type="submit">
+                @Localizer[LocalizationCaptions.Save].Value
+            </button>
+        </div>
+    </div>
+    @Html.HiddenFor(i => i.Id)
+</form>
+
+

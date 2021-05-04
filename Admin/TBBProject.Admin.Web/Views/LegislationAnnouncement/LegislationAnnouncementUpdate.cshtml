@@ -1,0 +1,80 @@
+@model LegislationAnnouncementVM
+
+<script>
+    $(function () {
+        $("form").kendoValidator();
+        $("#buttonCancel").click(function () {
+            $("#windowPopUp").data("kendoWindow").close();
+        });
+    });
+
+    function completed() {
+        $("#windowPopUp").data("kendoWindow").close();
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+
+    function dateChange(e) {
+        $('#ReleaseDateStr').val(e.sender._oldText).trigger("change");
+    }
+    $(document).ready(function () {
+        $('#ReleaseDateStr').val($('#ReleaseDate').val()).trigger("change");
+        $('#EndReleaseDateStr').val($('#EndReleaseDate').val()).trigger("change");
+
+    });
+    function enddateChange(e) {
+        $('#EndReleaseDateStr').val(e.sender._oldText).trigger("change");
+    }
+</script>
+<form asp-controller="LegislationAnnouncement" asp-action="EditingLegislationAnnouncement_Update" id="LegislationAnnouncementUpdateForm"
+      data-ajax="true"
+      data-ajax-complete="completed"
+      data-ajax-method="POST">
+    <div class="row" style="min-width:750px;">
+        <div class="col s12">
+            <div class="form-group">
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.ReleaseDate)
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DatePickerFor(i=>i.ReleaseDate)
+                .Events(i=>i.Change("dateChange")).Format("{0:dd/MM/yyyy}")
+                .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+                .DateInput()
+            )
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.EndReleaseDate)
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DatePickerFor(i=>i.EndReleaseDate)
+                .Events(i=>i.Change("enddateChange")).Format("{0:dd/MM/yyyy}")
+                .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+                .DateInput()
+            )
+                </div>
+                <div class="editor-field" style="padding-bottom:15px">
+                    @(Html.Kendo().CheckBoxFor(i=>i.IsRelease))
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s6">
+            <button class="buttonClear" id="buttonCancel" type="button">
+                @Localizer[LocalizationCaptions.Cancel].Value
+
+            </button>
+        </div>
+        <div class="col s6">
+            <button class="buttonConfirm" type="submit">
+                @Localizer[LocalizationCaptions.Save].Value
+            </button>
+        </div>
+    </div>
+    @Html.HiddenFor(i => i.Id)
+    @Html.HiddenFor(i => i.EndReleaseDateStr)
+    @Html.HiddenFor(i => i.ReleaseDateStr)
+</form>
+
+

@@ -12,7 +12,6 @@ namespace TBBProject.Core.BusinessContracts
     public interface IDefinitionsBusiness
     {
         DataSourceResult GetResources(long languageId, [DataSourceRequest] DataSourceRequest request);
-        Task<List<LanguageVM>> GetLanguagesAsync();
         List<LanguageVM> GetLanguageList();
 
         void CreateResources([DataSourceRequest] DataSourceRequest request, IEnumerable<ResourcesVM> resources);
@@ -27,5 +26,13 @@ namespace TBBProject.Core.BusinessContracts
         void UpdateAnnouncement([DataSourceRequest] DataSourceRequest request, IEnumerable<AnnouncementTypeVM> announcement);
         void DeleteAnnouncement([DataSourceRequest] DataSourceRequest request, IEnumerable<AnnouncementTypeVM> announcement);
         List<AnnouncementTypeVM> Get_AnnouncementList();
+
+        Task<List<LanguageVM>> GetLanguagesAsync();
+        public DataSourceResult GetLanguages([DataSourceRequest] DataSourceRequest request);
+        void CreateLanguages([DataSourceRequest] DataSourceRequest request, IEnumerable<LanguageVM> resources);
+        void UpdateLanguages([DataSourceRequest] DataSourceRequest request, IEnumerable<LanguageVM> resources);
+        void DeleteLanguages([DataSourceRequest] DataSourceRequest request, IEnumerable<LanguageVM> resources);
+        Task<List<LanguageVM>> GetLanguagesAllAsync();
+       
     }
 }

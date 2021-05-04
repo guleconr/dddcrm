@@ -11,10 +11,10 @@ namespace TBBProject.Core.Data.Domain
         [Key] 
         public long Id { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public DateTime ? EndReleaseDate { get; set; }
         public bool IsRelease { get; set; }
+        public bool AddSchedule { get; set; }
         public ApprovalStatus ApprovalStatus { get; set; }
-        public long AnnouncementTypeId { get; set; }
-        public AnnouncementType AnnouncementType { get; set; }
         public List<AnnouncementLang> AnnouncementLang { get; set; }
     }
 }

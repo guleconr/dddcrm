@@ -10,6 +10,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using System;
 using TBBProject.Core.Common.Enums;
+using Kendo.Mvc;
 
 namespace TBBProject.Core.Business
 {
@@ -70,15 +71,14 @@ namespace TBBProject.Core.Business
             _videoGalleryDataLayer.UpdateVideoGalleryLang(evideoGallery);
         }
 
-        public void DeleteVideoGalleryLang(VideoGalleryLangVM videoGallery)
+        public void DeleteVideoGalleryLang(long Id)
         {
-            var evideoGallery = _mapper.Map<VideoGalleryLang>(videoGallery);
-            _videoGalleryDataLayer.DeleteVideoGalleryLang(evideoGallery);
+            _videoGalleryDataLayer.DeleteVideoGalleryLang(Id);
         }
 
-        public DataSourceResult GetVideoGalleryLangAllAsync([DataSourceRequest] DataSourceRequest request, long videoGalleryId)
+        public DataSourceResult GetVideoGalleryLangAll([DataSourceRequest] DataSourceRequest request, long videoGalleryId)
         {
-            var data = _videoGalleryDataLayer.GetVideoGalleryLangAllAsync(videoGalleryId).ToDataSourceResult(request);
+            var data = _videoGalleryDataLayer.GetVideoGalleryLangAll(videoGalleryId).ToDataSourceResult(request);
             data.Data = _mapper.Map<List<VideoGalleryLangVM>>(data.Data);
             return data;
         }
@@ -95,13 +95,20 @@ namespace TBBProject.Core.Business
             return _mapper.Map<VideoGalleryVM>(data);
         }
 
-        public DataSourceResult GetVideoGalleryAllAsync([DataSourceRequest] DataSourceRequest request, DateTime ReleaseDate)
+        public DataSourceResult GetVideoGalleryAll([DataSourceRequest] DataSourceRequest request, string ReleaseDate, string EndDate)
         {
-            var data = _videoGalleryDataLayer.GetVideoGalleryAllAsync();
-            //if (ReleaseDate.Year > 1)
-            //{
-            //    data = data.Where(i => i.ReleaseDate == ReleaseDate);
-            //}
+            var data = _videoGalleryDataLayer.GetVideoGalleryAll();
+            if (ReleaseDate != null && EndDate != null)
+            {
+                data = data.Where(i => i.ReleaseDate >= DateTime.ParseExact(ReleaseDate, "dd/MM/yyyy", System.Globalization.CultureInfo.GetCultureInfo("tr-TR").DateTimeFormat)
+                && i.ReleaseDate <= DateTime.ParseExact(EndDate, "dd/MM/yyyy", System.Globalization.CultureInfo.GetCultureInfo("tr-TR").DateTimeFormat));
+            }
+            if (request.Filters.Count > 0)
+            {
+                var filter = ((Kendo.Mvc.FilterDescriptor)( (Kendo.Mvc.CompositeFilterDescriptor)request.Filters[0]).FilterDescriptors[0]).Value;
+                data  = data.Where(i => i.VideoGalleryLang.Any(i => i.Title.Contains(filter.ToString())));
+                request.Filters.Clear();
+            }
             var res = data.ToDataSourceResult(request);
             res.Data = _mapper.Map<List<VideoGalleryVM>>(res.Data);
             return res;

@@ -9,21 +9,25 @@ namespace TBBProject.Core.BusinessContracts
 {
     public interface INewsBusiness
     {
-        DataSourceResult GetNewsAllAsync([DataSourceRequest] DataSourceRequest request, int? IsRelease, DateTime ReleaseDate);
-        DataSourceResult GetNewsLangAllAsync([DataSourceRequest] DataSourceRequest request, long announcementId);
+        DataSourceResult GetNewsAll([DataSourceRequest] DataSourceRequest request, int? IsRelease, string ReleaseDate, string EndDate,int?ApprovalStatus, UserVM user = null);
+        DataSourceResult GetNewsApprovalAll([DataSourceRequest] DataSourceRequest request, int? IsRelease, string ReleaseDate, string EndDate, UserVM user = null);
 
-        NewsLangVM GetNewsLang(long announcementId);
-        NewsVM GetNews(long announcementId);
+        DataSourceResult GetNewsLangAll([DataSourceRequest] DataSourceRequest request, long newsId,UserVM user = null);
+
+        NewsLangVM GetNewsLang(long Id);
+        NewsVM GetNews(long Id);
 
 
 
         DataSourceResult GetNews(long languageId, [DataSourceRequest] DataSourceRequest request);
-        void CreateNews(NewsVM announcement);
-        void UpdateNews(NewsVM announcement);
+        void CreateNews(NewsVM news, UserVM user);
+        void UpdateNews(NewsVM news);
         void DeleteNews(long Id);
+        
+        void CreateNewsLang(NewsLangVM news);
+        void UpdateNewsLang(NewsLangVM news);
+        void DeleteNewsLang(long Id);
+        void AppNews(long Id);
 
-        void CreateNewsLang(NewsLangVM announcement);
-        void UpdateNewsLang(NewsLangVM announcement);
-        void DeleteNewsLang(NewsLangVM announcement);
     }
 }

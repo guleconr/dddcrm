@@ -15,11 +15,11 @@
                      {
                      })
                      .Editable(editable => editable.Mode(GridEditMode.InLine).ConfirmDelete(Localizer[LocalizationCaptions.ConfirmDelete].Value).DisplayDeleteConfirmation(Localizer[LocalizationCaptions.ConfirmDelete].Value))
-                    .HtmlAttributes(new { style = "height:430px;" })
+                    .HtmlAttributes(new { style = "height:660px;" })
                     .DataSource(dataSource => dataSource
                        .Ajax()
                         .Batch(true)
-                        .PageSize(5)
+                        .PageSize(10)
                         .ServerOperation(true)
                         .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
                         .Model(model => {

@@ -16,6 +16,7 @@ namespace TBBProject.Core.BusinessContracts
         Task<List<UserVM>> ServerFiltering_UsersNameAsync(string name);
         Task<List<UserVM>> ServerFiltering_UsersSurnameAsync(string surname);
         Task<List<UserVM>> ServerFiltering_UsersEmailAsync(string email);
+        DataSourceResult GetUsersByFilter([DataSourceRequest] DataSourceRequest request, string name, string surname);
 
     }
 }

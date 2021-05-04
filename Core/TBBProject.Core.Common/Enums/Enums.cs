@@ -39,4 +39,39 @@ namespace TBBProject.Core.Common.Enums
         Waiting = 0
     };
 
+    public enum DynamicMenuTypeEnum
+    {
+       
+        [Display(Name = LocalizationCaptions.No)]
+        Text = 0,
+        [Display(Name = LocalizationCaptions.Yes)]
+        Radio = 1,
+        [Display(Name = LocalizationCaptions.Yes)]
+        Dropdown = 2,
+        [Display(Name = LocalizationCaptions.Yes)]
+        Datepicker = 3,
+        [Display(Name = LocalizationCaptions.Yes)]
+        TextArea = 4,
+    };
+
+    public enum MunicipalityEnum
+    {
+        [Display(Name = LocalizationCaptions.BigCity)]
+        BigCity = 0,
+        [Display(Name = LocalizationCaptions.BigDistrict)]
+        BigDistrict = 1,
+        [Display(Name = LocalizationCaptions.City)]
+        City = 2,
+        [Display(Name = LocalizationCaptions.District)]
+        District = 3
+    };
+
+    public enum MunicipalityCityEnum
+    {
+        [Display(Name = LocalizationCaptions.BigCity)]
+        BigCity = 0,
+        [Display(Name = LocalizationCaptions.City)]
+        City = 2,
+    };
+
 }

@@ -10,6 +10,7 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
     public class AnnouncementTypeVM 
     {
         public long Id { get; set; }
+        [Display(Name = LocalizationCaptions.Name)]
         public string Name { get; set; }
     }
 }

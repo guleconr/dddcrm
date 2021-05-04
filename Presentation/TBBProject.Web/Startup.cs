@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TBBProject.Core.Business.Extension;
 using TBBProject.Core.Common;
 using TBBProject.Core.Common.Extensions;
 using TBBProject.Core.Common.Helper;
 using TBBProject.Core.Data;
 using TBBProject.Core.Web;
+using TBBProject.Web.Extensions;
 
 namespace TBBProject.Web
 {
@@ -28,20 +32,13 @@ namespace TBBProject.Web
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            GlobalConfiguration.WebRootPath = HostingEnvironment.WebRootPath;
-            GlobalConfiguration.ContentRootPath = HostingEnvironment.ContentRootPath;
-            var applicationSettings = Configuration.GetSection("ApplicationSettings").Get<ApplicationSettings>();
-            GlobalConfiguration.PageSize = int.Parse(applicationSettings.PageSize);
-            services.AddTransient(ec => new EncryptionService(new KeyInfo("45BLO2yoJkvBwz99kBEMlNkxvL40vUSGaqr/WBu3+Vg=", "Ou3fn+I9SVicGWMLkFEgZQ==")));
             var cs = Configuration.GetConnectionString("DefaultConnection");
-            services.AddSingleton<IRandomGenerator, RandomGenerator>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddAutoMapper(c => c.AddProfile<AutoMapping>(), typeof(Startup));
             services.AddDistributedMemoryCache();
             services.AddTierService(Configuration);
             services.AddControllers(options => options.EnableEndpointRouting = false);
-            services.AddControllers().AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize
-            );
+            services.AddScoped<UrlLocalizationFilter>();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0).
                 AddNewtonsoftJson(i =>
                 {
@@ -50,13 +47,16 @@ namespace TBBProject.Web
                     i.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 });
             services.AddKendo();
-            services.AddAudit();
             return services.ConfigureApplicationServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.ConfigureRequestPipeline();
+            app.Use(async (context, next) =>
+            {
+                await next();
+            });
         }
     }
 }

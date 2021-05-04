@@ -17,11 +17,11 @@
                          toolbar.Create().Text(Localizer[LocalizationCaptions.AddNewRecord].Value);
                      })
                         .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title(Localizer[LocalizationCaptions.User].Value)).TemplateName("UsersUpdateView").ConfirmDelete(Localizer[LocalizationCaptions.ConfirmDelete].Value).DisplayDeleteConfirmation(Localizer[LocalizationCaptions.ConfirmDelete].Value))
-                         .HtmlAttributes(new { style = "height:430px;" })
+                         .HtmlAttributes(new { style = "height:650px;" })
                         .DataSource(dataSource => dataSource
                        .Ajax()
                         .Batch(true)
-                        .PageSize(5)
+                        .PageSize(10)
                         .ServerOperation(true)
                          .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
                         .Model(model => {
@@ -31,6 +31,6 @@
                         .Create("EditingUsers_Create", "Authority")
                         .Update("EditingUsers_Update", "Authority")
                         .Destroy("EditingUsers_Destroy", "Authority")
-                        .Read(read => read.Action("Get_Users", "Authority", new { name = Model.NameSearch, surname = Model.SurnameSearch, userType = Model.UserTypeSearch, email = Model.EmailSearch }))
+                        .Read(read => read.Action("Get_Users", "Authority", new { name = Model.NameSearch, surname = Model.SurnameSearch }))
                      )
                 )

@@ -10,7 +10,7 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
     public class AuthorityVM
     {
         public long Id { get; set; }
-        [Display(Name = LocalizationCaptions.ReleaseDate)]
+        [Display(Name = LocalizationCaptions.Name)]
         [Required(ErrorMessage = LocalizationCaptions.Required)]
         public string Name { get; set; }
         public long? ParentMenu { get; set; }

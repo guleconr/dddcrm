@@ -1,0 +1,72 @@
+@model LegislationAnnouncementVM
+@(Html.Kendo().Grid<LegislationAnnouncementVM>()
+    .Name("grid")
+    .Columns(columns => {
+        columns.Bound(p => p.TitleStr).Filterable(false);
+        columns.Bound(p => p.ReleaseDate).Filterable(false).Format("{0:dd/MM/yyyy}");
+        columns.Bound(p => p.EndReleaseDate).Filterable(false).Format("{0:dd/MM/yyyy}");
+        columns.Bound(p => p.IsReleaseStr).Filterable(false);
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateLegislationAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"addLegislationAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">add</i>");
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteLegislationAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
+
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Search().Text(@Localizer[LocalizationCaptions.Search].Value);
+        toolbar.Custom()
+        .Text(@Localizer[LocalizationCaptions.AddNewRecord].Value).
+        HtmlAttributes(new { onclick = "createLA()" });
+    })
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:800px;" })
+    .ClientDetailTemplateId("ChildGrid")
+    .DataSource(dataSource => dataSource
+       .Ajax()
+        .Batch(true)
+        .PageSize(20)
+        .ServerOperation(true)
+            .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+        .Model(model => {
+            model.Id(p => p.Id);
+        })
+            .Create("EditingLegislationAnnouncement_Create", "LegislationAnnouncement")
+            .Update("EditingLegislationAnnouncement_Update", "LegislationAnnouncement")
+            .Destroy("EditingLegislationAnnouncement_Destroy", "LegislationAnnouncement")
+            .Read(read => read.Action("Get_LegislationAnnouncement", "LegislationAnnouncement", new { IsRelease = Model.IsReleaseSearch, ReleaseDate = Model.ReleaseDateSearchStr, EndDate = Model.EndDateSearchStr })))
+            .Events(events => events.DataBound("dataBound"))
+                        .Pageable()
+
+    )
+
+
+<script id="ChildGrid" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<LegislationAnnouncementLangVM>()
+            .Name("grid_#=Id#")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Title).Filterable(false);
+                columns.Bound(p => p.Language.Name).Filterable(false);
+                columns.Bound(p => p.User.Name).Filterable(false);
+                columns.Bound(p => p.Content).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateLegislationAnnouncementLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+                columns.Bound(p => p.Content).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteLegislationAnnouncementLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
+
+            })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .ServerOperation(true)
+                .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+                .Model(model =>
+                {
+                    model.Id(p => p.Id);
+                })
+                .Read(read => read.Action("Get_LegislationAnnouncementLang", "LegislationAnnouncement", new { legislationAnnouncementId = "#=Id#" }))
+            )
+            .Pageable()
+            .Sortable()
+            .ToClientTemplate()
+    )
+
+
+</script>

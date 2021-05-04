@@ -6,17 +6,17 @@
                     .Name("grid")
                     .Columns(columns => {
                         columns.Bound(p => p.Name);
-                        columns.Command(command => { command.Edit().Text("Güncelle"); command.Destroy().Text("Sil"); }).Width(250);
+                        columns.Command(command => { command.Edit().Text(@Localizer[LocalizationCaptions.Update].Value); command.Destroy().Text(@Localizer[LocalizationCaptions.Delete].Value); }).Width(250);
                     })
                     .Sortable()
                     .Scrollable()
                     .Filterable()
                       .ToolBar(toolbar =>
                       {
-                          toolbar.Create().Text("Yeni Kayıt Ekle");
+                          toolbar.Create().Text(@Localizer[LocalizationCaptions.AddNewRecord].Value);
                       })
-                     .Editable(editable => editable.Mode(GridEditMode.InLine).ConfirmDelete("Kaydet")
-                     .DisplayDeleteConfirmation("Kaydet2"))
+                     .Editable(editable => editable.Mode(GridEditMode.InLine).ConfirmDelete(Localizer[LocalizationCaptions.Save].Value)
+                     .DisplayDeleteConfirmation(Localizer[LocalizationCaptions.Save].Value))
                     .HtmlAttributes(new { style = "height:750px;" })
                     .DataSource(dataSource => dataSource
                        .Ajax()

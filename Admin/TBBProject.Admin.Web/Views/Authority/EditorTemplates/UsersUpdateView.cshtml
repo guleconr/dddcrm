@@ -24,5 +24,51 @@
             @Html.TextBoxFor(i => i.Email, new { @class = "k-textbox", style = "width:100%" })
         </div>
     </div>
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Password)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Password, new { @class = "k-textbox", style = "width:100%", type = "password", placeholder = @Localizer[LocalizationCaptions.Password].Value })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RoleId)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(p=>p.RoleId)
+                                .HtmlAttributes(new { style = "width:100%" })
+                                .OptionLabel(Localizer[LocalizationCaptions.SelectRole].Value)
+                                .DataTextField("Name")
+                                .DataValueField("Id")
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("Get_RolesDropdown", "Authority");
+                                    });
+                                }))
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Language)
+        </div>
+        <div class="editor-field">
+        @(Html.Kendo().DropDownListFor(p=>p.Language)
+                                .HtmlAttributes(new { style = "width:100%" })
+                                .OptionLabel(Localizer[LocalizationCaptions.SelectLanguage].Value)
+                                .DataTextField("Name")
+                                .DataValueField("CultureName")
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("Get_LanguageList", "Definitions");
+                                    });
+                                }))
+        </div>
+    </div>
 </div>
 @Html.HiddenFor(i => i.Id)

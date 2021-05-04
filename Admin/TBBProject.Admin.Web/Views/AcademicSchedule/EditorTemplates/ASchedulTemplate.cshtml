@@ -1,0 +1,78 @@
+@model AcademicScheduleVM
+<script>
+    function dateChange(e) {
+        debugger;
+        $('#StartDateStr').val(e.sender._oldText).trigger("change");
+    }
+    $(document).ready(function () {
+        $('#StartDateStr').val($('#StartDate').val()).trigger("change");
+        $('#EndDateStr').val($('#EndDate').val()).trigger("change");
+
+    });
+    function enddateChange(e) {
+        $('#EndDateStr').val(e.sender._oldText).trigger("change");
+    }
+
+
+</script>
+@Html.HiddenFor(i => i.StartDateStr)
+@Html.HiddenFor(i => i.EndDateStr)
+<div class="row s12" style="min-width:750px;">
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LanguageId)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(p=>p.LanguageId)
+                                    .HtmlAttributes(new { style = "width:100%" })
+                                    .OptionLabel(@Localizer[LocalizationCaptions.SelectLanguage].Value)
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("Get_LanguageList", "Definitions");
+                                        });
+                                    }))
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Title)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Title, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.StartDate)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DateTimePickerFor(i=>i.StartDate).Format("{0:dd.MM.yyyy HH:mm}")
+                .Value(DateTime.Now).Events(i=>i.Change("dateChange"))
+                .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+            )
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.EndDate)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DateTimePickerFor(i=>i.EndDate).Format("{0:dd.MM.yyyy HH:mm}")
+                .Value(DateTime.Now).Events(i=>i.Change("enddateChange"))
+                .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+            )
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Quota)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Quota, new { @class = "k-textbox", style = "width:100%", type = "number" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Url)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Url, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+    </div>
+</div>
+
+@Html.HiddenFor(i => i.Id)

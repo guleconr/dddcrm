@@ -1,0 +1,48 @@
+@model MunicipalityVM
+<div class="row s12" style="min-width:750px;">
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Name)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Name, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Phone)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Phone, new { @class = "k-textbox", style = "width:100%", type = "number" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Email)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Email, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Population)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Population, new { @class = "k-textbox", style = "width:100%", type = "number" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.MunicipalityType)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(p=>p.MunicipalityType)
+                                    .HtmlAttributes(new { style = "width:100%" })
+                                    .OptionLabel(@Localizer[LocalizationCaptions.MunicipalityType].Value)
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("Get_MunicipalityCityList", "Definitions");
+                                        });
+                                    }))
+        </div>
+    </div>
+</div>
+
+@Html.HiddenFor(i => i.Id)

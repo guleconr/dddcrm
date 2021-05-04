@@ -1,3 +1,4 @@
+@model long
 <div class="card animate fadeUp">
     <div class="card-move-up waves-effect waves-block waves-light">
         <div class="move-up white darken-1" style="min-height:500px;">
@@ -7,7 +8,7 @@
                     .HtmlAttributes(new { style = "width:100%" })
                     .DataTextField("Name")
                     .DataValueField("Id")
-                    .OptionLabel("Select Language")
+                    .Value(Model.ToString())
                     .Height(310)
                     .DataSource(source =>
                     {
@@ -57,6 +58,7 @@
     }
     $(document).ready(function () {
         var dropdownlist = $("#languages").data("kendoDropDownList");
+        debugger;
         $("#grid_Div").load("/Definitions/ResourceGridDiv?languageId=" + dropdownlist.value());
     });
     $("#refresh-Button").click(function () {

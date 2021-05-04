@@ -141,3 +141,6 @@ div#grid {
 .k-numerictextbox .k-numeric-wrap .k-input {
   padding: 0px !important;
 }
+.k-treeview-lines .k-checkbox {
+  display: none !important;
+}

@@ -29,11 +29,7 @@ namespace TBBProject.Core.Business
             resources.Data = _mapper.Map<List<ResourcesVM>>(( resources.Data ));
             return resources;
         }
-        public async Task<List<LanguageVM>> GetLanguagesAsync()
-        {
-            var languages = await _definitionsDataLayer.GetLanguagesAsync();
-            return _mapper.Map<List<LanguageVM>>(languages);
-        }
+     
         public void CreateResources([DataSourceRequest] DataSourceRequest request, IEnumerable<ResourcesVM> resources)
         {
             var eResources = _mapper.Map<List<Resource>>(( resources ));
@@ -73,8 +69,50 @@ namespace TBBProject.Core.Business
             return _mapper.Map<List<IconVM>>(icons);
         }
         #endregion
+        #region Languages
+        public async Task<List<LanguageVM>> GetLanguagesAsync()
+        {
+            var languages = await _definitionsDataLayer.GetLanguagesAsync();
+            return _mapper.Map<List<LanguageVM>>(languages);
+        }
+        public DataSourceResult GetLanguages([DataSourceRequest] DataSourceRequest request)
+        {
+            var resources = _definitionsDataLayer.GetLanguages().OrderBy(i => i.Name).ToDataSourceResult(request);
+            resources.Data = _mapper.Map<List<LanguageVM>>(( resources.Data ));
+            return resources;
+        }
 
-
+        public void CreateLanguages([DataSourceRequest] DataSourceRequest request, IEnumerable<LanguageVM> resources)
+        {
+            var eResources = _mapper.Map<List<Language>>(( resources ));
+            foreach (var item in eResources)
+            {
+                _definitionsDataLayer.CreateLanguages(item);
+            }
+        }
+        public void UpdateLanguages([DataSourceRequest] DataSourceRequest request, IEnumerable<LanguageVM> resources)
+        {
+            var eResources = _mapper.Map<List<Language>>(( resources ));
+            foreach (var item in eResources)
+            {
+                _definitionsDataLayer.UpdateLanguages(item);
+            }
+        }
+        public void DeleteLanguages([DataSourceRequest] DataSourceRequest request, IEnumerable<LanguageVM> resources)
+        {
+            var eResources = _mapper.Map<List<Language>>(( resources ));
+            foreach (var item in eResources)
+            {
+                _definitionsDataLayer.DeleteLanguages(item);
+            }
+        }
+        public async Task<List<LanguageVM>> GetLanguagesAllAsync()
+        {
+            var resources = await _definitionsDataLayer.GetLanguagesAllAsync();
+            var result = _mapper.Map<List<LanguageVM>>(( resources ));
+            return result;
+        }
+        #endregion
         #region Announcement
         public DataSourceResult GetAnnouncement( [DataSourceRequest] DataSourceRequest request)
         {

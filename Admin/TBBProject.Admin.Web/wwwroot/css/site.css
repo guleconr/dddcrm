@@ -2,7 +2,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background: linear-gradient(to right, #b92b27, #1565c0)
+  background: linear-gradient(to right, #b92b27, #1565c0);
+  color: #b92b27;
 }
 
 .box {
@@ -135,4 +136,7 @@ a.socialIcon:hover,
 .body-content {
   padding-left: 15px;
   padding-right: 15px;
+}
+.k-checkbox {
+  display: none !important;
 }

@@ -3,8 +3,9 @@
 @(Html.Kendo().Grid<AcademicScheduleVM>()
     .Name("grid")
     .Columns(columns => {
-        columns.Bound(p => p.StartDate).Filterable(false).Format("{0:dd.MM.yyyy}");
-        columns.Bound(p => p.EndDate).Filterable(false).Format("{0:dd.MM.yyyy}");
+        columns.Bound(p => p.TitleStr).Filterable(false);
+        columns.Bound(p => p.StartDate).Filterable(false).Format("{0:dd/MM/yyyy HH:mm}");
+        columns.Bound(p => p.EndDate).Filterable(false).Format("{0:dd/MM/yyyy HH:mm}");
         columns.Bound(p => p.Quota).Filterable(false);
         columns.Bound(p => p.StartDate).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAcademicSchedule(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
         columns.Bound(p => p.StartDate).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"addAcademicSchedule(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">add</i>");
@@ -13,10 +14,11 @@
     })
     .ToolBar(toolbar =>
     {
+        toolbar.Search().Text(@Localizer[LocalizationCaptions.Search].Value);
         toolbar.Create().Text(@Localizer[LocalizationCaptions.AddNewRecord].Value);
     })
-     .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title("Akademik Takvim Ekle"))
-                        .TemplateName("AcademicScheduleTemplate").ConfirmDelete("Kaydı silmek için onaylayınız!").DisplayDeleteConfirmation("Kaydı silmek istediğinize eminmisiniz!!"))
+     .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title(@Localizer[LocalizationCaptions.AddAcademicSchedule].Value))
+                        .TemplateName("ASchedulTemplate").ConfirmDelete(@Localizer[LocalizationCaptions.ApproveForDelete].Value).DisplayDeleteConfirmation(@Localizer[LocalizationCaptions.AreYouSureDelete].Value))
 
     .Scrollable()
     .HtmlAttributes(new { style = "height:800px;" })
@@ -33,8 +35,9 @@
             .Create("EditingAcademicSchedule_Create", "AcademicSchedule")
             .Update("EditingAcademicSchedule_Update", "AcademicSchedule")
             .Destroy("EditingAcademicSchedule_Destroy", "AcademicSchedule")
-            .Read(read => read.Action("Get_AcademicSchedule", "AcademicSchedule", new { ReleaseDate = Model.StartDate })))
+            .Read(read => read.Action("Get_AcademicSchedule", "AcademicSchedule", new { ReleaseDate = Model.StartDateSearchStr, EndDate = Model.EndDateSearchStr })))
             .Events(events => events.DataBound("dataBound"))
+                        .Pageable()
 
     )
 
@@ -47,7 +50,8 @@
                 columns.Bound(p => p.Title).Filterable(false);
                 columns.Bound(p => p.Url).Filterable(false);
                 columns.Bound(p => p.Language.Name).Filterable(false);
-                columns.Bound(p => p.Url).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAcademicScheduleLang(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+                columns.Bound(p => p.Url).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAcademicScheduleLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+                columns.Bound(p => p.Url).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteAcademicScheduleLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
 
             })
 

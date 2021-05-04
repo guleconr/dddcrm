@@ -7,28 +7,85 @@ namespace TBBProject.Core.Common
     public static class LocalizationCaptions
     {
 
+        public const string EndReleaseDate = "EndReleaseDate";
         public const string ReleaseDate = "ReleaseDate";
         public const string IsRelease = "IsRelease";
+        public const string AddSchedule = "AddSchedule";
         public const string IsNotRelease = "IsNotRelease";
         public const string AnnouncementTypeId = "AnnouncementTypeId";
         public const string Content = "Content";
+        public const string NewsContent = "NewsContent";
+        public const string ContentContent = "ContentContent";
+        public const string AnnContent = "AnnContent";
+        public const string LAContent = "LAContent";
+
+        public const string HeadLine = "HeadLine";
+        public const string SliderImage = "SliderImage";
+        public const string NewsImage = "NewsImage";
+        public const string Image = "Image";
+        public const string AnnImage = "AnnImage";
+        public const string ContentImage = "ContentImage";
+
+        public const string Link = "Link";
+        public const string OnlyNumber = "OnlyNumber";
+        public const string LaLink = "LaLink";
+
+        public const string Files = "Files";
+        public const string NewsGallery = "NewsGallery";
+        public const string Gallery = "Gallery";
+        public const string NewsFile = "NewsFile";
         public const string SelectLanguage = "SelectLangulage";
+        public const string AddAcademicSchedule = "AddAcademicSchedule";
+        public const string ApproveForDelete = "ApproveForDelete";
+        public const string AreYouSureDelete = "AreYouSureDelete";
+        public const string AddAnouncement = "AddAnouncement";
+        public const string AddLegislationAnouncement = "AddLegislationAnouncement";
+
+        public const string AddContent = "AddContent";
+
+        public const string AddNews = "AddNews";
+
+        public const string AddMunicipality = "AddMunicipality";
+        public const string UpdateMunicipality = "UpdateMunicipality";
+        public const string AddVideoGallery = "AddVideoGallery";
+        public const string UpdateVideoGallery = "UpdateVideoGallery";
+        public const string UpdateNews = "UpdateNews";
+
+        public const string UpdateAnouncement = "UpdateAnouncement";
+        public const string UpdateAcademicSchedule = "UpdateAcademicSchedule";
+        public const string UpdateContent = "UpdateContent";
+        public const string UpdateLegislationAnouncement = "UpdateLegislationAnouncement";
+
+        public const string Update = "Update";
+
+
         public const string SelectAnnoucement = "SelectAnnoucement";
         public const string ApprovalType = "ApprovalType";
         public const string Filter = "Filter";
         public const string Approval = "Approval";
+        public const string ConfirmApproval = "ConfirmApproval";
+
         public const string Clear = "Clear";
         public const string Waiting = "Waiting";
         public const string StartDate = "StartDate";
         public const string EndDate = "EndDate";
         public const string Quota = "Quota";
+        public const string TbbLogin = "TbbLogin";
+        public const string UsernamePass = "UsernamePass";
 
 
-
+        public const string City = "City";
+        public const string BigCity = "BigCity";
+        public const string District = "District";
+        public const string BigDistrict = "BigDistrict";
 
         public const string Logout = "Logout";
         public const string Home = "Home";
         public const string Email = "Email";
+        public const string Population = "Population";
+        public const string MunicipalityType = "MunicipalityType";
+
+
         public const string Forbidden = "Forbidden";
         public const string ResetPasswordConfirmation = "ResetPasswordConfirmation";
         public const string PleaseEnterValidEmail = "PleaseEnterValidEmail";
@@ -103,6 +160,7 @@ namespace TBBProject.Core.Common
         public const string BackendAccess = "BackendAccess";
         public const string EmailConfirmed = "EmailConfirmed";
         public const string UserRoles = "UserRoles";
+        public const string UserRole = "UserRole";
         public const string ToggleNavigation = "ToggleNavigation";
         public const string Profile = "Profile";
         public const string SetPassword = "SetPassword";
@@ -146,6 +204,7 @@ namespace TBBProject.Core.Common
         public const string PasswordSet = "PasswordSet";
         public const string TwoFactorAuthenticationProviderSet = "TwoFactorAuthenticationProviderSet";
         public const string PhoneSet = "PhoneSet";
+        public const string Phone = "Phone";
         public const string PhoneRemoved = "PhoneRemoved";
         public const string ConfirmAccount = "ConfirmAccount";
         public const string AccountConfirmLinkText = "AccountConfirmLinkText";
@@ -182,6 +241,13 @@ namespace TBBProject.Core.Common
         public const string ResetPassword = "ResetPassword";
         public const string PasswordResetMessage = "PasswordResetMessage";
         public const string PasswordConfirm = "PasswordConfirm";
+        public const string Back = "Back";
+
+        public const string DateNotBigtoEnDate = "DateNotBigtoEnDate";
+        public const string DateNotSmalltoStartDate = "DateNotSmalltoStartDate";
+
+
+
         public const string UnlockToContinue = "UnlockToContinue";
         public const string InvalidLoginAttempt = "InvalidLoginAttempt";
         public const string Required = "Required";
@@ -199,6 +265,9 @@ namespace TBBProject.Core.Common
         public const string Text = "Text";
         public const string Icon = "Icon";
         public const string Url = "Url";
+        public const string YoutubeUrl = "YoutubeUrl";
+        public const string AscheduleUrl = "AscheduleUrl";
+
         public const string AuthorityType = "AuthorityType";
         public const string MenuOrder = "MenuOrder";
         public const string IsMenu = "IsMenu";
@@ -243,5 +312,12 @@ namespace TBBProject.Core.Common
         public const string Man = "Man";
         public const string Women = "Women";
         public const string Mix = "Mix";
+
+        public const string CultureName = "CultureName";
+        public const string Country = "Country";
+        public const string Region = "Region";
+        public const string IsDefault = "IsDefault";
+        public const string SelectRole = "SelectRole";
+        public const string Remove = "Remove";
     }
 }

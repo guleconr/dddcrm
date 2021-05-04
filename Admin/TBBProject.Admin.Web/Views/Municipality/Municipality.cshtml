@@ -1,0 +1,148 @@
+@model MunicipalityVM
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <form asp-controller="Municipality" asp-action="MunicipalitySearchPost" id="MunicipalityForm"
+                  data-ajax="true"
+                  data-ajax-method="POST"
+                  data-ajax-mode="replace"
+                  data-ajax-update="#content">
+                <div class="row">
+
+                </div>
+                <div class="row" style="padding-bottom:20px;">
+                    <div class="col s12">
+                        <div class="editor-label">
+                            @Html.LabelFor(i => i.MunicipalityTypeSearch)
+                        </div>
+                        <div class="editor-field" style="padding-bottom:15px">
+                            @(Html.Kendo().DropDownListFor(p=>p.MunicipalityTypeSearch)
+                                    .HtmlAttributes(new { style = "width:100%" })
+                                    .OptionLabel(@Localizer[LocalizationCaptions.MunicipalityType].Value)
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("Get_MunicipalityList", "Definitions");
+                                        });
+                                    }))
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-bottom:15px;">
+                    <div class="col s8">
+
+                    </div>
+                    <div class="col s2">
+                        <button class="buttonConfirm" type="submit">
+                            @Localizer[LocalizationCaptions.Filter].Value
+                        </button>
+                    </div>
+                    <div class="col s2">
+                        <button class="buttonClear" type="reset" id="resetButton">
+                            @Localizer[LocalizationCaptions.Clear].Value
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div id="content">
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script>
+    function addMunicipality(e) {
+        $('#popupWindowDiv').load('/MunicipalityAdd/' + e);
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.AddMunicipality].Value))"
+        });
+    }
+    function updateMunicipality(e) {
+        $('#popupWindowDiv').load('/MunicipalityUpdate/'+e);
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.UpdateMunicipality].Value))"
+        });
+    }
+
+    function deleteMunicipality(e) {
+        var result = confirm("@(Html.Raw( Localizer[LocalizationCaptions.ConfirmDelete].Value))");
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "/Municipality/EditingMunicipality_Destroy",
+                data: {
+                    'Id': e,
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (response) {
+                    $("#MunicipalityForm").submit();
+                }
+            });
+        }
+    }
+
+    function deleteMunicipalityDistrict(e) {
+        var result = confirm("@(Html.Raw( Localizer[LocalizationCaptions.ConfirmDelete].Value))");
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "/Municipality/EditingMunicipalityDistrict_Destroy",
+                data: {
+                    'Id': e,
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (response) {
+                    $("#MunicipalityForm").submit();
+                }
+            });
+        }
+    }
+
+    function updateMunicipalityDistrict(e) {
+        $('#popupWindowDiv').load('/MunicipalityDistrictUpdate/' + e);
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.UpdateMunicipality].Value))"
+        });
+    }
+
+    function ajaxSuccess() {
+        $('#popupWindowDiv').html("");
+        $("#windowPopUp").data("kendoWindow").close();
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+
+    $("#resetButton").click(function () {
+        $('#MunicipalityForm').trigger("reset");
+        $("#MunicipalityForm").submit();
+    });
+    $(document).ready(function () {
+        $("#MunicipalityForm").submit();
+    });
+    function dataBound() {
+        this.expandRow(this.tbody.find("tr.k-master-row").first());
+    }
+
+    function sync_handler(e) {
+        this.read();
+    }
+
+</script>

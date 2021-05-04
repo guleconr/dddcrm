@@ -9,8 +9,10 @@ namespace TBBProject.Core.BusinessContracts
 {
     public interface IAnnouncementBusiness
     {
-        DataSourceResult GetAnnouncementAllAsync([DataSourceRequest] DataSourceRequest request, int? IsRelease, DateTime ReleaseDate, int AnnouncementType);
-        DataSourceResult GetAnnouncementLangAllAsync([DataSourceRequest] DataSourceRequest request, long announcementId);
+        DataSourceResult GetAnnouncementAll([DataSourceRequest] DataSourceRequest request, int? IsRelease, string ReleaseDate, string EndDate, int? ApprovalStatus ,UserVM user = null);
+        DataSourceResult GetAnnouncementLangAll([DataSourceRequest] DataSourceRequest request, long announcementId, UserVM user = null);
+
+        DataSourceResult GetAnnouncementApprovalAll([DataSourceRequest] DataSourceRequest request, int? IsRelease, string ReleaseDate, string EndDate, UserVM user = null);
 
         AnnouncementLangVM GetAnnouncementLang(long announcementId);
         AnnouncementVM GetAnnouncement(long announcementId);
@@ -18,12 +20,14 @@ namespace TBBProject.Core.BusinessContracts
 
 
         DataSourceResult GetAnnouncement(long languageId, [DataSourceRequest] DataSourceRequest request);
-        void CreateAnnouncement(AnnouncementVM announcement);
+        void CreateAnnouncement(AnnouncementVM announcement,UserVM user);
         void UpdateAnnouncement(AnnouncementVM announcement);
         void DeleteAnnouncement(long Id);
+        void AppAnnouncement(long Id);
+
 
         void CreateAnnouncementLang(AnnouncementLangVM announcement);
         void UpdateAnnouncementLang(AnnouncementLangVM announcement);
-        void DeleteAnnouncementLang(AnnouncementLangVM announcement);
+        void DeleteAnnouncementLang(long Id);
     }
 }

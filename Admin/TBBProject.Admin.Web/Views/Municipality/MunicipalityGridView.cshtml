@@ -1,0 +1,78 @@
+@model MunicipalityVM
+
+@(Html.Kendo().Grid<MunicipalityVM>()
+    .Name("grid")
+    .Columns(columns => {
+        columns.Bound(p => p.Name).Filterable(false);
+
+        columns.Bound(p => p.Phone).Filterable(false);
+        columns.Bound(p => p.Email).Filterable(false);
+        columns.Bound(p => p.Population).Filterable(false);
+        columns.Bound(p => p.MunicipalityType).Filterable(false);
+        columns.Bound(p => p.Name).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateMunicipality(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+        columns.Bound(p => p.Name).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"addMunicipality(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">add</i>");
+        columns.Bound(p => p.Name).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteMunicipality(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
+
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Search().Text(@Localizer[LocalizationCaptions.Search].Value);
+        toolbar.Create().Text(@Localizer[LocalizationCaptions.AddNewRecord].Value);
+    })
+     .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title(@Localizer[LocalizationCaptions.AddMunicipality].Value))
+                        .TemplateName("MunicipalityTemplate").ConfirmDelete(@Localizer[LocalizationCaptions.ApproveForDelete].Value).DisplayDeleteConfirmation(@Localizer[LocalizationCaptions.AreYouSureDelete].Value))
+
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:800px;" })
+    .ClientDetailTemplateId("ChildGrid")
+    .DataSource(dataSource => dataSource
+       .Ajax()
+        .Batch(true)
+        .PageSize(20)
+        .ServerOperation(true)
+            .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+        .Model(model => {
+            model.Id(p => p.Id);
+        })
+            .Create("EditingMunicipality_Create", "Municipality")
+            .Update("EditingMunicipality_Update", "Municipality")
+            .Destroy("EditingMunicipality_Destroy", "Municipality")
+            .Read(read => read.Action("Get_Municipality", "Municipality", new { MunicipalityType = Model.MunicipalityTypeSearch })))
+            .Events(events => events.DataBound("dataBound"))
+                        .Pageable()
+
+    )
+
+
+<script id="ChildGrid" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<DistrictVM>()
+            .Name("grid_#=Id#")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Name).Filterable(false);
+                columns.Bound(p => p.Phone).Filterable(false);
+                columns.Bound(p => p.Email).Filterable(false);
+                columns.Bound(p => p.Population).Filterable(false);
+                columns.Bound(p => p.MunicipalityType).Filterable(false);
+                columns.Bound(p => p.Name).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateMunicipalityDistrict(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+                columns.Bound(p => p.Name).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteMunicipalityDistrict(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
+
+            })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .ServerOperation(true)
+                .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+                .Model(model =>
+                {
+                    model.Id(p => p.Id);
+                })
+                .Read(read => read.Action("Get_MunicipalityDistrict", "Municipality", new { municipalityId = "#=Id#" }))
+            )
+            .Pageable()
+            .Sortable()
+            .ToClientTemplate()
+    )
+
+
+</script>

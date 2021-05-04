@@ -40,17 +40,16 @@ namespace TBBProject.Admin.Web.Controllers
 
         }
         #region Resources
-        [Route("Languages")]
+        [Route("Resources")]
         [PageCheckAttribute]
         public async Task<IActionResult> Resources()
         {
-            return View();
+            var result = _definitionBusiness.GetLanguagesAsync().Result.FirstOrDefault();
+            return View(result.Id);
         }
-
-        public  JsonResult Get_LanguagesAsyc()
+        public IActionResult Resources2()
         {
-            var result = _definitionBusiness.GetLanguagesAsync();
-            return Json(result);
+            return View();
         }
         public JsonResult Get_Resources([DataSourceRequest] DataSourceRequest request, long languageId)
         {
@@ -88,6 +87,68 @@ namespace TBBProject.Admin.Web.Controllers
             return Json(resources.ToDataSourceResult(request, ModelState));
         }
 
+        #endregion
+
+        #region Languages
+        [Route("Languages")]
+        [PageCheckAttribute]
+        public async Task<IActionResult> Languages()
+        {
+            var result = _definitionBusiness.GetLanguagesAsync().Result.FirstOrDefault();
+            return View(result.Id);
+        }
+        public IActionResult Languages2()
+        {
+            return View();
+        }
+        public JsonResult Get_LanguagesAsyc()
+        {
+            var result = _definitionBusiness.GetLanguagesAsync();
+            return Json(result);
+        }
+        public JsonResult Get_Languages([DataSourceRequest] DataSourceRequest request)
+        {
+            var result = _definitionBusiness.GetLanguages(request);
+            return Json(result);
+        }
+
+        [AcceptVerbs("Post")]
+        public ActionResult EditingLanguages_Create([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<LanguageVM> languages)
+        {
+            if (languages != null && ModelState.IsValid)
+            {
+                _definitionBusiness.CreateLanguages(request, languages);
+            }
+            return Json(languages.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs("Post")]
+        public ActionResult EditingLanguages_Update([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<LanguageVM> languages)
+        {
+            if (languages != null && ModelState.IsValid)
+            {
+                _definitionBusiness.UpdateLanguages(request, languages);
+            }
+            return Json(languages.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs("Post")]
+        public ActionResult EditingLanguages_Destroy([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<LanguageVM> languages)
+        {
+            if (languages.Any())
+            {
+                _definitionBusiness.DeleteLanguages(request, languages);
+            }
+            return Json(languages.ToDataSourceResult(request, ModelState));
+        }
+        public JsonResult Get_LanguageList()
+        {
+            var result = _definitionBusiness.GetLanguageList();
+            return Json(result);
+        }
+        #endregion
+
+        #region Announcement
         [PageCheckAttribute]
         [Route("AnnouncementType")]
         public async Task<IActionResult> AnnouncementType()
@@ -107,11 +168,7 @@ namespace TBBProject.Admin.Web.Controllers
             return Json(result);
         }
 
-        public JsonResult Get_LanguageList()
-        {
-            var result = _definitionBusiness.GetLanguageList();
-            return Json(result);
-        }
+     
 
         [AcceptVerbs("Post")]
         public ActionResult EditingAnnouncementType_Create([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<AnnouncementTypeVM> announcement)
@@ -179,8 +236,11 @@ namespace TBBProject.Admin.Web.Controllers
         public JsonResult Get_AuthorityTypeEnumList() => Json(EnumExtension.EnumToLocalizedList<AuthorityTypeEnum>(_localizer).Select(x => new { Id = x.Value, Name = x.Text }));
         public JsonResult Get_StatusEnumList() => Json(EnumExtension.EnumToLocalizedList<StatusEnum>(_localizer).Select(x => new { Id = x.Value, Name = x.Text }));
         public JsonResult Get_ApprovalTypeList() => Json(EnumExtension.EnumToLocalizedList<ApprovalStatus>(_localizer).Select(x => new { Id = x.Value, Name = x.Text }));
+        public JsonResult Get_MunicipalityList() => Json(EnumExtension.EnumToLocalizedList<MunicipalityEnum>(_localizer).Select(x => new { Id = x.Value, Name = x.Text }));
 
-        
+        public JsonResult Get_MunicipalityCityList() => Json(EnumExtension.EnumToLocalizedList<MunicipalityCityEnum>(_localizer).Select(x => new { Id = x.Value, Name = x.Text }));
+
+
         #endregion
 
     }

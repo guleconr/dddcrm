@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using TBBProject.Core.Common.Enums;
 using TBBProject.Core.Data;
 using TBBProject.Core.Data.Domain;
 using TBBProject.Core.DataContracts;
@@ -16,6 +17,7 @@ namespace TBBProject.Core.DataLayer
         private readonly IUnitOfWork _uow;
         private readonly IRepository<Announcement> _announcementRepository;
         private readonly IRepository<AnnouncementLang> _announcementlangRepository;
+        private readonly IRepository<AnnouncementFile> _announcementFileRepository;
         private readonly IMapper _mapper;
 
 
@@ -24,6 +26,8 @@ namespace TBBProject.Core.DataLayer
             _uow = uow;
             _announcementRepository = _uow.Repository<Announcement>();
             _announcementlangRepository = _uow.Repository<AnnouncementLang>();
+            _announcementFileRepository = _uow.Repository<AnnouncementFile>();
+
             _mapper = mapper;
 
         }
@@ -42,16 +46,25 @@ namespace TBBProject.Core.DataLayer
         {
             var result = _announcementRepository.TableNoTracking.Where(i => i.Id == model.Id).FirstOrDefault();
             result.ReleaseDate = model.ReleaseDate;
+            result.EndReleaseDate = model.EndReleaseDate;
             result.IsRelease = model.IsRelease;
-            result.AnnouncementTypeId = model.AnnouncementTypeId;
+            result.AddSchedule = model.AddSchedule;
 
             _announcementRepository.Update(result);
             _uow.SaveChanges();
         }
         public void DeleteAnnouncement(long Id)
         {
-            var result = _announcementRepository.TableNoTracking.Include(i=>i.AnnouncementLang).Where(i => i.Id == Id).FirstOrDefault();
+            var result = _announcementRepository.TableNoTracking.Include(i => i.AnnouncementLang).Where(i => i.Id == Id).FirstOrDefault();
             _announcementRepository.Delete(result);
+            _uow.SaveChanges();
+        }
+
+        public void AppAnnouncement(long Id)
+        {
+            var result = _announcementRepository.TableNoTracking.Include(i => i.AnnouncementLang).Where(i => i.Id == Id).FirstOrDefault();
+            result.ApprovalStatus = ApprovalStatus.Approval;
+            _announcementRepository.Update(result);
             _uow.SaveChanges();
         }
 
@@ -65,34 +78,47 @@ namespace TBBProject.Core.DataLayer
             var result = _announcementlangRepository.TableNoTracking.Where(i => i.Id == model.Id).FirstOrDefault();
             result.Title = model.Title;
             result.Content = model.Content;
-            result.Image = model.Image;
+            if (model.ImageName != null)
+            {
+                result.Image = model.Image;
+                result.ImageName = model.ImageName;
+            }
+            if (model.AnnouncementFile.Count > 0)
+            {
+                var file = _announcementFileRepository.TableNoTracking.Where(i => i.AnnouncementLangId == model.Id);
+                foreach (var item in file)
+                {
+                    _announcementFileRepository.Delete(item);
+                }
+                result.AnnouncementFile = model.AnnouncementFile;
+            }
             result.LanguageId = model.LanguageId;
             _announcementlangRepository.Update(result);
             _uow.SaveChanges();
         }
-        public void DeleteAnnouncementLang(AnnouncementLang model)
+        public void DeleteAnnouncementLang(long Id)
         {
-            var result = _announcementlangRepository.TableNoTracking.Where(i => i.Id == model.Id).FirstOrDefault();
+            var result = _announcementlangRepository.TableNoTracking.Where(i => i.Id == Id).FirstOrDefault();
             _announcementlangRepository.Delete(result);
             _uow.SaveChanges();
         }
-        public IQueryable<Announcement> GetAnnouncementAllAsync()
+        public IQueryable<Announcement> GetAnnouncementAll()
         {
-            return  _announcementRepository.TableNoTracking.Include(i=>i.AnnouncementType).Include(i=>i.AnnouncementLang).ThenInclude(i=>i.Language);
+            return _announcementRepository.TableNoTracking.Include(i => i.AnnouncementLang).ThenInclude(i => i.Language).Include(i => i.AnnouncementLang).ThenInclude(i => i.User).ThenInclude(i => i.UserRole).OrderByDescending(i=>i.ReleaseDate);
         }
-        public IQueryable<AnnouncementLang> GetAnnouncementLangAllAsync(long announcementId)
+        public IQueryable<AnnouncementLang> GetAnnouncementLangAll(long announcementId)
         {
-            return _announcementlangRepository.TableNoTracking.Include(i => i.Language).Where(i=>i.AnnouncementId== announcementId);
+            return _announcementlangRepository.TableNoTracking.Include(i => i.Language).Include(i => i.User).Where(i => i.AnnouncementId == announcementId);
         }
 
         public AnnouncementLang GetAnnouncementLang(long announcementId)
         {
-            return _announcementlangRepository.TableNoTracking.Include(i => i.Language).Where(i => i.Id == announcementId).FirstOrDefault();
+            return _announcementlangRepository.TableNoTracking.Include(i => i.Language).Include(i => i.AnnouncementFile).Where(i => i.Id == announcementId).FirstOrDefault();
         }
 
         public Announcement GetAnnouncementWithId(long announcementId)
         {
-            return _announcementRepository.TableNoTracking.Where(i => i.Id == announcementId).FirstOrDefault();
+            return _announcementRepository.TableNoTracking.Where(i => i.Id == announcementId).Include(i => i.AnnouncementLang).ThenInclude(i => i.Language).FirstOrDefault();
         }
     }
 }

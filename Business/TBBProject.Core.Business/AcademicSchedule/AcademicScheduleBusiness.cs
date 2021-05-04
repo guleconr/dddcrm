@@ -46,6 +46,7 @@ namespace TBBProject.Core.Business
 
         public void UpdateAcademicSchedule(AcademicScheduleVM academicSchedule)
         {
+
             var eacademicSchedule = _mapper.Map<AcademicSchedule>(academicSchedule);
             _academicScheduleDataLayer.UpdateAcademicSchedule(eacademicSchedule);
         }
@@ -70,15 +71,14 @@ namespace TBBProject.Core.Business
             _academicScheduleDataLayer.UpdateAcademicScheduleLang(eacademicSchedule);
         }
 
-        public void DeleteAcademicScheduleLang(AcademicScheduleLangVM academicSchedule)
+        public void DeleteAcademicScheduleLang(long Id)
         {
-            var eacademicSchedule = _mapper.Map<AcademicScheduleLang>(academicSchedule);
-            _academicScheduleDataLayer.DeleteAcademicScheduleLang(eacademicSchedule);
+            _academicScheduleDataLayer.DeleteAcademicScheduleLang(Id);
         }
 
-        public DataSourceResult GetAcademicScheduleLangAllAsync([DataSourceRequest] DataSourceRequest request, long academicScheduleId)
+        public DataSourceResult GetAcademicScheduleLangAll([DataSourceRequest] DataSourceRequest request, long academicScheduleId)
         {
-            var data = _academicScheduleDataLayer.GetAcademicScheduleLangAllAsync(academicScheduleId).ToDataSourceResult(request);
+            var data = _academicScheduleDataLayer.GetAcademicScheduleLangAll(academicScheduleId).ToDataSourceResult(request);
             data.Data = _mapper.Map<List<AcademicScheduleLangVM>>(data.Data);
             return data;
         }
@@ -95,13 +95,20 @@ namespace TBBProject.Core.Business
             return _mapper.Map<AcademicScheduleVM>(data);
         }
 
-        public DataSourceResult GetAcademicScheduleAllAsync([DataSourceRequest] DataSourceRequest request, DateTime ReleaseDate)
+        public DataSourceResult GetAcademicScheduleAll([DataSourceRequest] DataSourceRequest request, string ReleaseDate, string EndDate)
         {
-            var data = _academicScheduleDataLayer.GetAcademicScheduleAllAsync();
-            //if (ReleaseDate.Year > 1)
-            //{
-            //    data = data.Where(i => i.ReleaseDate == ReleaseDate);
-            //}
+            var data = _academicScheduleDataLayer.GetAcademicScheduleAll();
+            if (ReleaseDate!=null)
+            {
+                data = data.Where(i => i.StartDate >= DateTime.ParseExact(ReleaseDate, "dd/MM/yyyy", System.Globalization.CultureInfo.GetCultureInfo("tr-TR").DateTimeFormat)
+                &&i.StartDate <= DateTime.ParseExact(EndDate, "dd/MM/yyyy", System.Globalization.CultureInfo.GetCultureInfo("tr-TR").DateTimeFormat));
+            }
+            if (request.Filters.Count > 0)
+            {
+                var filter = ( (Kendo.Mvc.FilterDescriptor)( (Kendo.Mvc.CompositeFilterDescriptor)request.Filters[0] ).FilterDescriptors[0] ).Value;
+                data = data.Where(i => i.AcademicScheduleLang.Any(i => i.Title.Contains(filter.ToString())));
+                request.Filters.Clear();
+            }
             var res = data.ToDataSourceResult(request);
             res.Data = _mapper.Map<List<AcademicScheduleVM>>(res.Data);
             return res;

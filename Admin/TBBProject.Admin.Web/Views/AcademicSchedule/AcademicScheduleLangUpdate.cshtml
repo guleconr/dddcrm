@@ -17,13 +17,14 @@
       data-ajax="true"
       data-ajax-complete="completed"
       data-ajax-method="POST">
-    <div class="row s12" style="min-width:750px;">
-        <div class="form-group">
-            <div class="editor-label">
-                @Html.LabelFor(model => model.LanguageId)
-            </div>
-            <div class="editor-field">
-                @(Html.Kendo().DropDownListFor(p=>p.LanguageId)
+    <div class="row" style="min-width:750px;">
+        <div class="col s12">
+            <div class="form-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LanguageId)
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DropDownListFor(p=>p.LanguageId)
                                     .HtmlAttributes(new { style = "width:100%" })
                                     .OptionLabel(@Localizer[LocalizationCaptions.SelectLanguage].Value)
                                     .DataTextField("Name")
@@ -32,23 +33,23 @@
                                     {
                                         source.Read(read =>
                                         {
-                                            read.Action("Get_LanguageList", "Definitions");
+                                            read.Action("Get_LanguageListUpdate", "AcademicSchedule", new { academicScheduleId = Model.AcademicScheduleId, academicScheduleLangId = Model.Id });
                                         });
                                     }))
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Title)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(i => i.Title, new { @class = "k-textbox", style = "width:100%" })
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Url)
+                </div>
+                <div class="editor-field" style="padding-bottom:15px">
+                    @Html.TextBoxFor(i => i.Url, new { @class = "k-textbox", style = "width:100%" })
+                </div>
             </div>
-            <div class="editor-label">
-                @Html.LabelFor(i => i.Title)
-            </div>
-            <div class="editor-field">
-                @Html.TextBoxFor(i => i.Title, new { @class = "k-textbox", style = "width:100%" })
-            </div>
-            <div class="editor-label">
-                @Html.LabelFor(i => i.Url)
-            </div>
-            <div class="editor-field">
-                @Html.TextBoxFor(i => i.Url, new { @class = "k-textbox", style = "width:100%" })
-            </div>
-
         </div>
     </div>
     <div class="row">

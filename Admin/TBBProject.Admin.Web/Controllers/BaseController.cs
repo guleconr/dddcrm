@@ -67,6 +67,7 @@ namespace TBBProject.Admin.Web.Controllers
                         HttpContext.SignInAsync(principal);
                         var serialised = JsonConvert.SerializeObject(user);
                         HttpContext.Session.SetString("SessionUser", serialised);
+                        HttpContext.Session.SetString("ProjectCulture", user.Language);
                     }
                     var selectedMenu = user.Authoritys.Where(i => i.Url == request.Path.ToUriComponent()).FirstOrDefault();
                     if (selectedMenu != null)
@@ -74,7 +75,10 @@ namespace TBBProject.Admin.Web.Controllers
                         ViewBag.LeftMenu = MenuHelper.GetYetkiMenu(user.Authoritys, request.Path.ToUriComponent(), _localizer);
                         ViewBag.Title = selectedMenu.Title;
                         ViewBag.Language = user.Language;
-                       
+                        ViewBag.Language = user.Language;
+                        ViewBag.LanguageStr = "lib/kendoui/js/cultures/kendo.culture." + user.Language + ".min.js";
+                        ViewBag.LanguageStrMsg = "lib/kendoui/js/messages/kendo.messages." + user.Language + ".min.js";
+
                         var selectedId = selectedMenu.Id;
                         var count = 1;
                         if (selectedMenu.Url == "/")

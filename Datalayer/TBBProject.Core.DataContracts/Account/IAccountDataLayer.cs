@@ -16,5 +16,6 @@ namespace TBBProject.Core.DataLayer
         Task<List<Users>> ServerFiltering_UsersNameAsync(string name);
         Task<List<Users>> ServerFiltering_UsersSurnameAsync(string surname);
         Task<List<Users>> ServerFiltering_UsersEmailAsync(string surname);
+        IQueryable<Users> GetUsersByFilter(string name, string surname);
     }
 }

@@ -278,18 +278,18 @@ namespace TBBProject.Core.Business
         #region Users
         public void CreateUsers([DataSourceRequest] DataSourceRequest request, IEnumerable<UserVM> users)
         {
-            var eUsers = _mapper.Map<List<Users>>((users));
-            foreach (var item in eUsers)
+            foreach (var item in users)
             {
-                _authorityDataLayer.CreateUsers(item);
+                var eUsers = _mapper.Map<Users>(( item ));
+                _authorityDataLayer.CreateUsers(eUsers, item.RoleId);
             }
         }
         public void UpdateUsers([DataSourceRequest] DataSourceRequest request, IEnumerable<UserVM> users)
         {
-            var eUsers = _mapper.Map<List<Users>>(( users ));
-            foreach (var item in eUsers)
+            foreach (var item in users)
             {
-                _authorityDataLayer.UpdateUsers(item);
+                var eUsers = _mapper.Map<Users>(( item ));
+                _authorityDataLayer.UpdateUsers(eUsers, item.RoleId);
             }
         }
         public void DeleteUsers([DataSourceRequest] DataSourceRequest request, IEnumerable<UserVM> users)

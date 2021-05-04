@@ -13,11 +13,14 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
         public long Id { get; set; }
         [Display(Name = LocalizationCaptions.ReleaseDate)]
         public DateTime ReleaseDate { get; set; }
+        public string ReleaseDateStr { get; set; }
         public List<VideoGalleryLangVM> VideoGalleryLang { get; set; }
 
         [Display(Name = LocalizationCaptions.Title)]
+        [Required(ErrorMessage = LocalizationCaptions.Required)]
         public string Title { get; set; }
-        [Display(Name = LocalizationCaptions.Url)]
+        [Display(Name = LocalizationCaptions.YoutubeUrl)]
+        [Required(ErrorMessage = LocalizationCaptions.Required)]
         public string Url { get; set; }
         [Display(Name = LocalizationCaptions.Language)]
         public long LanguageId { get; set; }
@@ -25,6 +28,15 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
 
         [Display(Name = LocalizationCaptions.ReleaseDate)]
         public DateTime ReleaseDateSearch { get; set; }
+        public string ReleaseDateSearchStr { get; set; }
+
+        [Display(Name = LocalizationCaptions.EndDate)]
+        public DateTime EndDateSearch { get; set; }
+        public string EndDateSearchStr { get; set; }
+
+
+        [Display(Name = LocalizationCaptions.Title)]
+        public string TitleStr { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
 @model NewsVM
+
 <div class="card animate fadeUp">
     <div class="card-move-up waves-effect waves-block waves-light">
         <div class="move-up white darken-1" style="min-height:500px;">
@@ -8,7 +9,7 @@
                   data-ajax-mode="replace"
                   data-ajax-update="#content">
                 <div class="row">
-                    <div class="col s4">
+                    <div class="col s3">
                         <div class="editor-label">
                             @Html.LabelFor(i => i.IsReleaseSearch)
                         </div>
@@ -27,22 +28,53 @@
                                     }))
                         </div>
                     </div>
-                    <div class="col s4">
+                    <div class="col s3">
                         <div class="editor-label">
                             @Html.LabelFor(i => i.ReleaseDateSearch)
                         </div>
                         <div class="editor-field">
-                            @(Html.Kendo().DatePickerFor(i=>i.ReleaseDateSearch).Culture("tr-TR")
-                .Value(DateTime.Now).Format("{0:dd.MM.yyyy}")
+                            @(Html.Kendo().DatePickerFor(i=>i.ReleaseDateSearch)
+                                .Events(i => i.Change("dateChange")).Value(DateTime.Now).Format("{0:dd.MM.yyyy}")
                 .HtmlAttributes(new { style = "width: 100%" })
                 .DateInput()
             )
                         </div>
                     </div>
+                    <div class="col s3">
+                        <div class="editor-label">
+                            @Html.LabelFor(i => i.EndDateSearch)
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().DatePickerFor(i=>i.EndDateSearch)
+                                .Events(i => i.Change("enddateChange")).Value(DateTime.Now.AddDays(1)).Format("{0:dd.MM.yyyy}")
+                .HtmlAttributes(new { style = "width: 100%" })
+                .DateInput()
+            )
+                        </div>
+                    </div>
+                    <div class="col s3">
+                        <div class="editor-label">
+                            @Html.LabelFor(i => i.ApprovalStatusSearch)
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().DropDownListFor(p=>p.ApprovalStatusSearch)
+                                    .HtmlAttributes(new { style = "width:100%" })
+                                    .OptionLabel(@Localizer[LocalizationCaptions.ApprovalType].Value)
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("Get_ApprovalTypeList", "Definitions");
+                                        });
+                                    }))
+                        </div>
+                    </div>
                 </div>
                 <div class="row" style="padding-bottom:20px;">
                 </div>
-                <div class="row">
+                <div class="row" style="padding-bottom:15px;">
                     <div class="col s8">
 
                     </div>
@@ -57,6 +89,8 @@
                         </button>
                     </div>
                 </div>
+                @Html.HiddenFor(i => i.ReleaseDateSearchStr)
+                @Html.HiddenFor(i => i.EndDateSearchStr)
             </form>
             <div id="content">
 
@@ -68,43 +102,85 @@
     </div>
 </div>
 <script>
+
+        function createNews() {
+        $('#popupWindowDiv').load('/CreateNews');
+        $("#windowPopUp").data("kendoWindow").open();
+        $("#windowPopUp").data("kendoWindow").setOptions({
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.AddNews].Value))"
+        });
+    }
     function addNews(e) {
         $('#popupWindowDiv').load('/NewsAdd/' + e);
         $("#windowPopUp").data("kendoWindow").open();
         $("#windowPopUp").data("kendoWindow").setOptions({
-            title: "Haber Düzenle"
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.AddNews].Value))"
         });
     }
     function updateNews(e) {
         $('#popupWindowDiv').load('/NewsUpdate/'+e);
         $("#windowPopUp").data("kendoWindow").open();
         $("#windowPopUp").data("kendoWindow").setOptions({
-            title: "Haber Düzenle"
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.UpdateNews].Value))"
         });
     }
 
     function deleteNews(e) {
-        $.ajax({
-            type: "POST",
-            url: "/News/EditingNews_Destroy",
-            data: {
-                'Id': e,
-            },
-            failure: function (response) {
-                alert(response.responseText);
-            },
-            error: function (response) {
-                alert(response.responseText);
-            }
-        });
-        $("#NewsForm").submit();
+        var result = confirm("@(Html.Raw( Localizer[LocalizationCaptions.ConfirmDelete].Value))");
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "/News/EditingNews_Destroy",
+                data: {
+                    'Id': e,
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (response) {
+                    $("#NewsForm").submit();
+                }
+            });
+        }
+    }
+
+    function deleteNewsLang(e) {
+        var result = confirm("@(Html.Raw( Localizer[LocalizationCaptions.ConfirmDelete].Value))");
+        if (result) {
+            $.ajax({
+                type: "POST",
+                url: "/News/EditingNewsLang_Destroy",
+                data: {
+                    'Id': e,
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (response) {
+                    $("#NewsForm").submit();
+                }
+            });
+        }
+    }
+    function dateChange(e) {
+        $('#ReleaseDateSearchStr').val(e.sender._oldText).trigger("change");
+    }
+
+    function enddateChange(e) {
+        $('#EndDateSearchStr').val(e.sender._oldText).trigger("change");
     }
 
     function updateNewsLang(e) {
         $('#popupWindowDiv').load('/NewsLangUpdate/' + e);
         $("#windowPopUp").data("kendoWindow").open();
         $("#windowPopUp").data("kendoWindow").setOptions({
-            title: "Haber Dil Düzenle"
+               title: "@(Html.Raw( Localizer[LocalizationCaptions.UpdateNews].Value))"
         });
     }
 
@@ -119,6 +195,8 @@
         $("#NewsForm").submit();
     });
     $(document).ready(function () {
+        $('#EndDateSearchStr').val($('#EndDateSeacrh').val()).trigger("change");
+        $('#ReleaseDateSearchStr').val($('#ReleaseDateSeacrh').val()).trigger("change");
         $("#NewsForm").submit();
     });
     function dataBound() {

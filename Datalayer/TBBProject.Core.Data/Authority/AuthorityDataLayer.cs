@@ -7,6 +7,7 @@ using TBBProject.Core.Data;
 using TBBProject.Core.Data.Domain;
 using TBBProject.Core.DataContracts;
 using Microsoft.EntityFrameworkCore;
+using TBBProject.Core.Common.Extensions;
 
 namespace TBBProject.Core.DataLayer
 {
@@ -18,7 +19,8 @@ namespace TBBProject.Core.DataLayer
         private readonly IRepository<UserRole> _userRoleRepository;
         private readonly IRepository<Authority> _authorityRepository;
         private readonly IRepository<RoleAuthority> _roleAuthorityRepository;
-        public AuthorityDataLayer(IUnitOfWork uow)
+        private readonly EncryptionService _encryptionService;
+        public AuthorityDataLayer(IUnitOfWork uow, EncryptionService encryptionService)
         {
             _uow = uow;
             _roleRepository = _uow.Repository<Role>();
@@ -26,6 +28,7 @@ namespace TBBProject.Core.DataLayer
             _roleAuthorityRepository = _uow.Repository<RoleAuthority>();
             _userRoleRepository = _uow.Repository<UserRole>();
             _usersRepository = _uow.Repository<Users>();
+            _encryptionService = encryptionService;
         }
 
         #region Role
@@ -201,51 +204,43 @@ namespace TBBProject.Core.DataLayer
         #endregion
 
         #region Users
-        public void CreateUsers(Users model)
+        public void CreateUsers(Users model,long roleId)
         {
             UserRole userRole = new UserRole();
             userRole.UserId = model.Id;
-            model.Language = "tr-TR";
+            model.Language = model.Language;
             model.IsFirstLogin = true;
+            model.Password = _encryptionService.Encrypt(model.Password);
             model.Status = Common.Enums.StatusEnum.Active;
-
-                Role selectedRole = _roleRepository.TableNoTracking.Where(i => i.Name == "Users").FirstOrDefault();
-                if (selectedRole != null)
-                {
-                    userRole.RoleId = selectedRole.Id;
-                    _userRoleRepository.Insert(userRole);
-                }
-            
+            UserRole newusrRole = new UserRole()
+            {
+                RoleId = roleId,
+                UserId = model.Id
+            };
+            model.UserRole = new List<UserRole>();
+            model.UserRole.Add(newusrRole);
             _usersRepository.Insert(model);
             _uow.SaveChanges();
         }
-        public void UpdateUsers(Users model)
+        public void UpdateUsers(Users model, long roleId)
         {
             Users selectedUser = _usersRepository.TableNoTracking.Where(i => i.Id == model.Id).FirstOrDefault();
-            UserRole userRole = new UserRole();
-            if (selectedUser!=null)
-            {
-                userRole = _userRoleRepository.TableNoTracking.Where(i => i.UserId == model.Id).FirstOrDefault();
-                if(userRole!=null)
-                {
-                    _userRoleRepository.Delete(userRole);
-                }
-            }
-            UserRole userRoleNew = new UserRole();
-            userRoleNew.UserId = model.Id;
             selectedUser.Name = model.Name;
             selectedUser.Surname = model.Surname;
             selectedUser.Email = model.Email;
-           
-
-                Role selectedRole = _roleRepository.TableNoTracking.Where(i => i.Name == "Users").FirstOrDefault();
-                if (selectedRole != null)
-                {
-                    userRoleNew.RoleId = selectedRole.Id;
-                    _userRoleRepository.Insert(userRoleNew);
-                }
-            
             _usersRepository.Update(selectedUser);
+            _uow.SaveChanges();
+            List<UserRole> oldRoles = _userRoleRepository.TableNoTracking.Where(i => i.UserId == selectedUser.Id).ToList();
+            foreach(var item in oldRoles)
+            {
+                _userRoleRepository.Delete(item);
+            }
+            UserRole userRoleNew = new UserRole()
+            {
+                RoleId=roleId,
+                UserId=selectedUser.Id
+            };
+            _userRoleRepository.Insert(userRoleNew);
             _uow.SaveChanges();
         }
         public void DeleteUsers(Users model)

@@ -67,17 +67,18 @@ namespace TBBProject.Core.DataLayer
             _academicSchedulelangRepository.Update(result);
             _uow.SaveChanges();
         }
-        public void DeleteAcademicScheduleLang(AcademicScheduleLang model)
+        public void DeleteAcademicScheduleLang(long Id)
         {
-            var result = _academicSchedulelangRepository.TableNoTracking.Where(i => i.Id == model.Id).FirstOrDefault();
+            var result = _academicSchedulelangRepository.TableNoTracking.Where(i => i.Id == Id).FirstOrDefault();
             _academicSchedulelangRepository.Delete(result);
             _uow.SaveChanges();
         }
-        public IQueryable<AcademicSchedule> GetAcademicScheduleAllAsync()
+        public IQueryable<AcademicSchedule> GetAcademicScheduleAll()
         {
-            return _academicScheduleRepository.TableNoTracking.Include(i => i.AcademicScheduleLang).ThenInclude(i => i.Language);
+            return _academicScheduleRepository.TableNoTracking.Include(i => i.AcademicScheduleLang).ThenInclude(i => i.Language).OrderByDescending(i => i.StartDate);
+            
         }
-        public IQueryable<AcademicScheduleLang> GetAcademicScheduleLangAllAsync(long academicScheduleId)
+        public IQueryable<AcademicScheduleLang> GetAcademicScheduleLangAll(long academicScheduleId)
         {
             return _academicSchedulelangRepository.TableNoTracking.Include(i => i.Language).Where(i => i.AcademicScheduleId == academicScheduleId);
         }
@@ -89,7 +90,7 @@ namespace TBBProject.Core.DataLayer
 
         public AcademicSchedule GetAcademicScheduleWithId(long academicScheduleId)
         {
-            return _academicScheduleRepository.TableNoTracking.Where(i => i.Id == academicScheduleId).FirstOrDefault();
+            return _academicScheduleRepository.TableNoTracking.Where(i => i.Id == academicScheduleId).Include(i=>i.AcademicScheduleLang).ThenInclude(i=>i.Language).FirstOrDefault();
         }
     }
 }

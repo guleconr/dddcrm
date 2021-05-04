@@ -41,9 +41,9 @@ namespace TBBProject.Core.DataContracts
         #endregion
 
         #region Users
-        void CreateUsers(Users model);
+        void CreateUsers(Users model,long roleId);
 
-        void UpdateUsers(Users model);
+        void UpdateUsers(Users model, long roleId);
 
         void DeleteUsers(Users model);
         #endregion

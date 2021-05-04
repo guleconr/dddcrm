@@ -1,0 +1,42 @@
+<div class="card animate fadeUp">
+    <div class="card-move-up waves-effect waves-block waves-light">
+        <div class="move-up white darken-1" style="min-height:500px;">
+            <div class="col-md-12">
+                @(Html.Kendo().Grid<LanguageVM>()
+                    .Name("grid")
+                    .Columns(columns => {
+                        columns.Bound(p => p.Name);
+                        columns.Bound(p => p.Country);
+                        columns.Bound(p => p.CultureName);
+                        columns.Bound(p => p.Region);
+                        columns.Bound(p => p.IsDefault);
+                        columns.Command(command => { command.Edit().Text(@Localizer[LocalizationCaptions.Update].Value); command.Destroy().Text(@Localizer[LocalizationCaptions.Delete].Value); }).Width(250);
+                    })
+                    .Sortable()
+                    .Scrollable()
+                      .ToolBar(toolbar =>
+                      {
+                          toolbar.Create().Text(@Localizer[LocalizationCaptions.AddNewRecord].Value);
+                      })
+                     .Editable(editable => editable.Mode(GridEditMode.InLine).ConfirmDelete(Localizer[LocalizationCaptions.Save].Value)
+                     .DisplayDeleteConfirmation(Localizer[LocalizationCaptions.Save].Value))
+                    .HtmlAttributes(new { style = "height:750px;" })
+                    .DataSource(dataSource => dataSource
+                       .Ajax()
+                        .Batch(true)
+                        .ServerOperation(true)
+                        .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+                        .Model(model => {
+                            model.Id(p => p.Id);
+                        })
+                        .Create("EditingLanguages_Create", "Definitions")
+                        .Update("EditingLanguages_Update", "Definitions")
+                        .Destroy("EditingLanguages_Destroy", "Definitions")
+                        .Read(read => read.Action("Get_Languages", "Definitions"))
+                     )
+                )
+
+            </div>
+        </div>
+    </div>
+</div>

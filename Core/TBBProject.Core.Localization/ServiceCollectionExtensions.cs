@@ -44,7 +44,7 @@ namespace TBBProject.Core.Localization
             }*/
 
             defaultCulture = new RequestCulture("tr-TR");
-            supportedCultures.Add(new CultureInfo("tr-TR"));
+            supportedCultures.Add(new CultureInfo("en-US"));
 
             var requestLocalizationOptions = new RequestLocalizationOptions
             {

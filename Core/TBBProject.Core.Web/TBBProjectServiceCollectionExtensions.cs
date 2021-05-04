@@ -24,16 +24,11 @@ namespace TBBProject.Core.Web
             services.AddHttpContextAccessor();
             services.AddSingleton<IUserAgentHelper, UserAgentHelper>();
             var manager = TBBProjectContext.Create();
-
             manager.Initialize(services);
-
             services.AddSingleton<IFileSystemFileProvider, FileSystemProvider>();
-
             var serviceProvider = manager.ConfigureServices(services, configuration);
-
             var assembly = typeof(ServiceCollectionExtensions).GetTypeInfo().Assembly;
             var part = new AssemblyPart(assembly);
-
             services.AddMvc().AddApplicationPart(assembly).AddControllersAsServices();
             return serviceProvider;
         }
@@ -70,8 +65,7 @@ namespace TBBProject.Core.Web
         public static IServiceCollection ConfigureTBBProjectMvcLocalization(this IServiceCollection services)
         {
             services.AddTBBProjectInternationalization();
-
-            var culture=new CultureInfo("tr-TR")
+            var culture=new CultureInfo("en-US")
             {
                 DateTimeFormat = new DateTimeFormatInfo(),
                 NumberFormat = new NumberFormatInfo()
@@ -81,7 +75,6 @@ namespace TBBProject.Core.Web
             {
                 culture
             };
-
             services.Configure<RequestLocalizationOptions>(
                 options =>
                 {

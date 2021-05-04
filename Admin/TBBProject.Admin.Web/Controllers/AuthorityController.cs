@@ -243,7 +243,11 @@ namespace TBBProject.Admin.Web.Controllers
             var result = await _accountBusiness.ServerFiltering_UsersEmailAsync(text);
             return Json(result);
         }
-
+        [HttpPost]
+        public IActionResult UserSearchPost(UserSearchVM model)
+        {
+            return PartialView("UserList", model);
+        }
         [AcceptVerbs("Post")]
         public ActionResult EditingUsers_Create([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<UserVM> users)
         {
@@ -263,6 +267,11 @@ namespace TBBProject.Admin.Web.Controllers
         {
             _authorityBusiness.DeleteUsers(request, users);
             return Json(users.ToDataSourceResult(request));
+        }
+        public JsonResult Get_Users([DataSourceRequest] DataSourceRequest request, string name, string surname)
+        {
+            var result = _accountBusiness.GetUsersByFilter(request, name, surname);
+            return Json(result);
         }
         #endregion
     }

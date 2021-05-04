@@ -13,7 +13,7 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
     public class UserVM
     {
         public long Id { get; set; }
-        [Display(Name = LocalizationCaptions.ReleaseDate)]
+        [Display(Name = LocalizationCaptions.Name)]
         [Required(ErrorMessage = LocalizationCaptions.Required)]
         [StringLength(30, MinimumLength = 3, ErrorMessage = LocalizationCaptions.MaxMinLength)]
         public string Name { get; set; }
@@ -30,16 +30,23 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
         [Required(ErrorMessage = LocalizationCaptions.Required)]
         public bool IsFirstLogin { get; set; }
         public int IncorrectLoginCount { get; set; }
+        [Required(ErrorMessage = LocalizationCaptions.Required)]
         public string Password { get; set; }
         [Display(Name = LocalizationCaptions.Language)]
+        [Required(ErrorMessage = LocalizationCaptions.Required)]
         public string Language { get; set; }
 
         public StatusEnum Status { get; set; }
         public string UserRoles { get; set; }
+        public long UserRoleId { get; set; }
+
         [Display(Name = LocalizationCaptions.Roles)]
         public List<RoleVM> UserRolesList { get; set; }
         [DataMember]
         public List<Authority> Authoritys { get; set; }
+        [Display(Name = LocalizationCaptions.UserRole)]
+        [Required(ErrorMessage = LocalizationCaptions.Required)]
+        public long RoleId { get; set; }
     }
 
     public class UserLoginVM
@@ -51,7 +58,6 @@ namespace TBBProject.Core.BusinessContracts.ViewModels
         public string Email { get; set; }
         [Display(Name = LocalizationCaptions.Password)]
         [Required(ErrorMessage = LocalizationCaptions.Required)]
-
         public string Password { get; set; }
     }
 

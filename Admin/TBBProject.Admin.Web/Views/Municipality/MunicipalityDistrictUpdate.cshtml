@@ -1,0 +1,67 @@
+@model DistrictVM
+
+<script>
+    $(function () {
+        $("form").kendoValidator();
+        $("#buttonCancel").click(function () {
+            $("#windowPopUp").data("kendoWindow").close();
+        });
+    });
+
+    function completed() {
+        $("#windowPopUp").data("kendoWindow").close();
+        $("#grid").data("kendoGrid").dataSource.read();
+    }
+</script>
+<form asp-controller="Municipality" asp-action="EditingMunicipalityDistrict_Update" id="MunicipalityDistrictUpdateForm"
+      data-ajax="true"
+      data-ajax-complete="completed"
+      data-ajax-method="POST">
+    <div class="row" style="min-width:750px;">
+        <div class="col s12">
+            <div class="form-group">
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Name)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(i => i.Name, new { @class = "k-textbox", style = "width:100%" })
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Phone)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(i => i.Phone, new { @class = "k-textbox", style = "width:100%" })
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Email)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(i => i.Email, new { @class = "k-textbox", style = "width:100%" })
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Population)
+                </div>
+                <div class="editor-field" style="padding-bottom:15px">
+                    @Html.TextBoxFor(i => i.Population, new { @class = "k-textbox", style = "width:100%", type = "number" })
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s6">
+            <button class="buttonClear" id="buttonCancel" type="button">
+                @Localizer[LocalizationCaptions.Cancel].Value
+
+            </button>
+        </div>
+        <div class="col s6">
+            <button class="buttonConfirm" type="submit">
+                @Localizer[LocalizationCaptions.Save].Value
+            </button>
+        </div>
+    </div>
+    @Html.HiddenFor(i => i.Id)
+</form>
+
+

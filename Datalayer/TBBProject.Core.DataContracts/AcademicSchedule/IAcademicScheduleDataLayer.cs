@@ -16,8 +16,8 @@ namespace TBBProject.Core.DataContracts
         void UpdateAcademicSchedule(AcademicSchedule model);
 
         void DeleteAcademicSchedule(long Id);
-        IQueryable<AcademicSchedule> GetAcademicScheduleAllAsync();
-        IQueryable<AcademicScheduleLang> GetAcademicScheduleLangAllAsync(long AcademicScheduleId);
+        IQueryable<AcademicSchedule> GetAcademicScheduleAll();
+        IQueryable<AcademicScheduleLang> GetAcademicScheduleLangAll(long AcademicScheduleId);
 
         AcademicScheduleLang GetAcademicScheduleLang(long AcademicScheduleId);
 
@@ -27,6 +27,6 @@ namespace TBBProject.Core.DataContracts
 
         void UpdateAcademicScheduleLang(AcademicScheduleLang model);
 
-        void DeleteAcademicScheduleLang(AcademicScheduleLang model);
+        void DeleteAcademicScheduleLang(long Id);
     }
 }

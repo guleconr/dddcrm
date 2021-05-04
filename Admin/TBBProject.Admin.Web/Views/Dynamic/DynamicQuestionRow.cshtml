@@ -1,0 +1,41 @@
+@model DynamicQuestionsItemVM
+<script>
+    $("#buttonRemove_@Model.Id").click(function () {
+        alert("ss");
+          $("#row_Question_@Model.Id").html("");
+    });
+    function seko(e) {
+          $("#row_Question_"+e).html("");
+    }
+</script>
+
+<div class="row" id="row_Question_@Model.Id">
+    <div class="input-field col s5 input-field-pop">
+        @Html.LabelFor(i => i.QuestionType)
+        @(Html.Kendo().DropDownList()
+            .Name("DynamicMenuResults[" + Model.Id+ "].QuestionType")
+                .HtmlAttributes(new { style = "width:100%" })
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("Get_QuestionTypeList", "Definitions");
+                    });
+                })
+            )
+    </div>
+    <div class="input-field col s5 input-field-pop">
+        @Html.LabelFor(i => i.Values)
+        @Html.TextBox("DynamicMenuResults[" + Model.Id + "].Values", Model.Values, new { @class = "k-textbox", style = "width:100%" })
+    </div>
+    <div class=" input-field col s2 input-field-pop" style="padding-top:30px  !important;">
+        <button class="buttonClear" id="buttonRemove_@Model.Id" type="button" onclick="seko('@Model.Id')">
+            @Localizer[LocalizationCaptions.Remove].Value
+        </button>
+    </div>
+</div>
+<div id="questions@(Model.Id+1)">
+
+</div>

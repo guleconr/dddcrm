@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using TBBProject.Core.Data;
 using TBBProject.Core.Data.Domain;
@@ -49,7 +50,7 @@ namespace TBBProject.Core.Localization
             get
             {
                 string culture = _httpContextAccessor.HttpContext.Session.GetString("ProjectCulture");
-
+                
                 var lang = new Language();
                 if (culture == null)
                 {

@@ -75,11 +75,14 @@ namespace TBBProject.Core.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("AnnouncementTypeId")
-                        .HasColumnType("bigint");
+                    b.Property<bool>("AddSchedule")
+                        .HasColumnType("bit");
 
                     b.Property<int>("ApprovalStatus")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndReleaseDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsRelease")
                         .HasColumnType("bit");
@@ -89,9 +92,30 @@ namespace TBBProject.Core.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnnouncementTypeId");
-
                     b.ToTable("Announcements");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.AnnouncementFile", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("AnnouncementLangId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("File")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnnouncementLangId");
+
+                    b.ToTable("AnnouncementFile");
                 });
 
             modelBuilder.Entity("TBBProject.Core.Data.Domain.AnnouncementLang", b =>
@@ -110,17 +134,25 @@ namespace TBBProject.Core.Data.Migrations
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("LanguageId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AnnouncementId");
 
                     b.HasIndex("LanguageId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("AnnouncementLang");
                 });
@@ -215,6 +247,228 @@ namespace TBBProject.Core.Data.Migrations
                     b.ToTable("Authority");
                 });
 
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.Content", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApprovalStatus")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsRelease")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Content");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.ContentFile", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("ContentLangId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("File")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentLangId");
+
+                    b.ToTable("ContentFile");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.ContentGallery", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("ContentLangId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentLangId");
+
+                    b.ToTable("ContentGallery");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.ContentLang", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ContentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("LanguageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ContentLang");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.District", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("MunicipalityId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("MunicipalityType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Population")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MunicipalityId");
+
+                    b.ToTable("District");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.DynamicQuestions", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DynamicQuestions");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.DynamicQuestionsItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("DynamicQuestionsId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("MenuType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PropertyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Values")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DynamicQuestionsId");
+
+                    b.ToTable("DynamicQuestionsItem");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.DynamicQuestionsResult", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("DynamicQuestionsId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("EnterDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("MyProperty")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Result")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DynamicQuestionsId");
+
+                    b.ToTable("DynamicQuestionsResult");
+                });
+
             modelBuilder.Entity("TBBProject.Core.Data.Domain.Icons", b =>
                 {
                     b.Property<long>("Id")
@@ -257,6 +511,116 @@ namespace TBBProject.Core.Data.Migrations
                     b.ToTable("Languages");
                 });
 
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.LegislationAnnouncement", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApprovalStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRelease")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LegislationAnnouncement");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.LegislationAnnouncementFile", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("File")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<long>("LegislationAnnouncementLangId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LegislationAnnouncementLangId");
+
+                    b.ToTable("LegislationAnnouncementFile");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.LegislationAnnouncementLang", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("LanguageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("LegislationAnnouncementId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("LegislationAnnouncementId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LegislationAnnouncementLang");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.Municipality", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MunicipalityType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Population")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Municipality");
+                });
+
             modelBuilder.Entity("TBBProject.Core.Data.Domain.News", b =>
                 {
                     b.Property<long>("Id")
@@ -276,6 +640,29 @@ namespace TBBProject.Core.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("News");
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.NewsFile", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("File")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("NewsLangId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NewsLangId");
+
+                    b.ToTable("NewsFile");
                 });
 
             modelBuilder.Entity("TBBProject.Core.Data.Domain.NewsGallery", b =>
@@ -323,17 +710,28 @@ namespace TBBProject.Core.Data.Migrations
                     b.Property<byte[]>("NewsImage")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("NewsImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte[]>("SliderImage")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("SliderImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LanguageId");
 
                     b.HasIndex("NewsId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("NewsLang");
                 });
@@ -572,11 +970,11 @@ namespace TBBProject.Core.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TBBProject.Core.Data.Domain.Announcement", b =>
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.AnnouncementFile", b =>
                 {
-                    b.HasOne("TBBProject.Core.Data.Domain.AnnouncementType", "AnnouncementType")
-                        .WithMany()
-                        .HasForeignKey("AnnouncementTypeId")
+                    b.HasOne("TBBProject.Core.Data.Domain.AnnouncementLang", "AnnouncementLang")
+                        .WithMany("AnnouncementFile")
+                        .HasForeignKey("AnnouncementLangId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -592,6 +990,126 @@ namespace TBBProject.Core.Data.Migrations
                     b.HasOne("TBBProject.Core.Data.Domain.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TBBProject.Core.Data.Domain.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.ContentFile", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.ContentLang", "ContentLang")
+                        .WithMany("ContentFile")
+                        .HasForeignKey("ContentLangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.ContentGallery", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.ContentLang", "ContentLang")
+                        .WithMany("ContentGallery")
+                        .HasForeignKey("ContentLangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.ContentLang", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.Content", "ContentObj")
+                        .WithMany("ContentLang")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TBBProject.Core.Data.Domain.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TBBProject.Core.Data.Domain.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.District", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.Municipality", "Municipality")
+                        .WithMany()
+                        .HasForeignKey("MunicipalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.DynamicQuestions", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.DynamicQuestionsItem", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.DynamicQuestions", "DynamicQuestions")
+                        .WithMany("DynamicMenuItems")
+                        .HasForeignKey("DynamicQuestionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.DynamicQuestionsResult", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.DynamicQuestions", "DynamicQuestions")
+                        .WithMany("DynamicMenuResults")
+                        .HasForeignKey("DynamicQuestionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.LegislationAnnouncementFile", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.LegislationAnnouncementLang", "LegislationAnnouncementLang")
+                        .WithMany("LegislationAnnouncementFile")
+                        .HasForeignKey("LegislationAnnouncementLangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.LegislationAnnouncementLang", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TBBProject.Core.Data.Domain.LegislationAnnouncement", "LegislationAnnouncement")
+                        .WithMany("LegislationAnnouncementLang")
+                        .HasForeignKey("LegislationAnnouncementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TBBProject.Core.Data.Domain.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TBBProject.Core.Data.Domain.NewsFile", b =>
+                {
+                    b.HasOne("TBBProject.Core.Data.Domain.NewsLang", "NewsLang")
+                        .WithMany()
+                        .HasForeignKey("NewsLangId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -616,6 +1134,12 @@ namespace TBBProject.Core.Data.Migrations
                     b.HasOne("TBBProject.Core.Data.Domain.News", "News")
                         .WithMany("NewsLang")
                         .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TBBProject.Core.Data.Domain.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

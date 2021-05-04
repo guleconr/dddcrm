@@ -1,4 +1,9 @@
+using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Localization.Routing;
+using Microsoft.AspNetCore.Routing;
 using TBBProject.Core.Common;
 using TBBProject.Core.Localization;
 
@@ -17,14 +22,28 @@ namespace TBBProject.Core.Web
         public static void UseTBBProjectMvc(this IApplicationBuilder app)
         {
             app.UseCookiePolicy();
-
             app.UseAuthentication();
+            var requestProvider = new RouteDataRequestCultureProvider();
 
-            app.UseMvc(routes =>
+            app.UseRouter(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapMiddlewareRoute("{culture=en-US}/{*mvcRoute}", subApp =>
+                {
+
+                    //subApp.UseMvc(mvcRoutes =>
+                    //{
+                    //    mvcRoutes.MapRoute(
+                    //        name: "default",
+                    //        template: "{culture=en-US}/{controller=Home}/{action=Index}/{id?}");
+                    //});
+
+                    subApp.UseMvc(mvcRoutes =>
+                    {
+                        mvcRoutes.MapRoute(
+                            name: "default",
+                            template: "{controller=Home}/{action=Index}/{id?}");
+                    });
+                });
             });
         }
 

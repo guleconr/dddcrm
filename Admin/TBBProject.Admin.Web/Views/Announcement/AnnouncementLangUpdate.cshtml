@@ -17,36 +17,37 @@
       data-ajax="true"
       data-ajax-complete="completed"
       data-ajax-method="POST">
-    <div class="row s12" style="min-width:750px;">
-        <div class="form-group">
-            <div class="editor-label">
-                @Html.LabelFor(model => model.LanguageId)
-            </div>
-            <div class="editor-field">
-                @(Html.Kendo().DropDownListFor(p=>p.LanguageId)
+    <div class="row" style="min-width:750px;">
+        <div class="col s12">
+            <div class="form-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LanguageId)
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DropDownListFor(p=>p.LanguageId)
                                     .HtmlAttributes(new { style = "width:100%" })
-                                    .OptionLabel("Dil Seçiniz")
+                                    .OptionLabel(@Localizer[LocalizationCaptions.SelectLanguage].Value)
                                     .DataTextField("Name")
                                     .DataValueField("Id")
                                     .DataSource(source =>
                                     {
                                         source.Read(read =>
                                         {
-                                            read.Action("Get_LanguageList", "Definitions");
+                                            read.Action("Get_LanguageListUpdate", "Announcement", new { announcementId = Model.AnnouncementId,announcementLangId = Model.Id });
                                         });
                                     }))
-            </div>
-            <div class="editor-label">
-                @Html.LabelFor(i => i.Title)
-            </div>
-            <div class="editor-field">
-                @Html.TextBoxFor(i => i.Title, new { @class = "k-textbox", style = "width:100%" })
-            </div>
-            <div class="editor-label">
-                @Html.LabelFor(i => i.Content)
-            </div>
-            <div class="editor-field">
-                @(Html.Kendo().EditorFor(p => p.Content)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Title)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(i => i.Title, new { @class = "k-textbox", style = "width:100%" })
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.Content)
+                </div>
+                <div class="editor-field" style="padding-bottom:15px">
+                    @(Html.Kendo().EditorFor(p => p.Content)
           .HtmlAttributes(new { style = "width: 100%; height:500px", aria_label = "editor" })
             .Tools(tools => tools
             .Clear()
@@ -69,15 +70,57 @@
             .Upload("Upload", "ImageBrowser")
             )
          )
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.ImageForm)
+                </div> 
+                <div class="editor-field">
+                    <div class="col s12" style="padding:0">
+                        @(Html.Kendo().Upload()
+                    .Name("ImageForm")
+                    .Multiple(false)
+                    .Validation(validation => validation.AllowedExtensions(new string[] { ".gif", ".jpg", ".jpeg", ".png" ,"tiff" }))
+                    .Validation(validation => validation.MaxFileSize(3145728))
+                    )
+                    </div>
+                    <div class="col s12" style="padding:0">
+                        @if (Model.ImageForm != null)
+                        {
+                            <ul id="existing-files" class="k-upload-files k-reset">
+                                <li class="k-file" data-att-id="@Model.ImageForm.Name">
+                                    <span class="k-filename" title="@Model.ImageForm.Name">@Model.ImageForm.Name</span>
+                                </li>
+                            </ul>
+                        }
+                    </div>
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(i => i.AnnouncementFileForm)
+                </div>
+                <div class="editor-field">
+                    <div class="col s12" style="padding:0">
+                        @(Html.Kendo().Upload()
+                    .Name("AnnouncementFileForm")
+                    .Multiple(true)
+                    .Validation(validation => validation.AllowedExtensions(new string[] { ".pdf", "docx", "xlsx" }))
+                    .Validation(validation => validation.MaxFileSize(3145728))
+                    )
+                    </div>
+                    <div class="col s12" style="padding:0;padding-bottom: 15px;">
+                        @if (Model.AnnouncementFileForm != null && Model.AnnouncementFileForm.Count > 0)
+                        {
+                            <ul id="existing-files" class="k-upload-files k-reset">
+                                @foreach (var file in Model.AnnouncementFileForm)
+                                {
+                                    <li data-att-id="@file.Name">
+                                        <span class="k-filename" title="@file.Name">@file.Name</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
             </div>
-            <div class="editor-label">
-                @Html.LabelFor(i => i.Image)
-            </div>
-            <div class="editor-field">
-                <input id="Image" title="Upload a product image"
-                       type="file" name="Image" />
-            </div>
-
         </div>
     </div>
     <div class="row">

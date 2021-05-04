@@ -1,0 +1,77 @@
+@model AnnouncementVM
+@(Html.Kendo().Grid<AnnouncementVM>()
+    .Name("grid")
+    .Columns(columns => {
+        columns.Bound(p => p.TitleStr).Filterable(false);
+        columns.Bound(p => p.ReleaseDate).Filterable(false).Format("{0:dd/MM/yyyy}");
+        columns.Bound(p => p.EndReleaseDate).Filterable(false).Format("{0:dd/MM/yyyy}");
+        columns.Bound(p => p.IsReleaseStr).Filterable(false);
+        columns.Bound(p => p.ApprovalStatusStr).Filterable(false);
+        columns.Bound(p => p.ApprovalStatus).Title(" ").Width(50).ClientTemplate(
+        "#if(ApprovalStatus==0){# " +
+        "<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"appAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">check</i>"+
+        "#} else {# " +
+        "<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"appAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\"></i>" +
+        "#}#");
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"addAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">add</i>");
+        columns.Bound(p => p.Title).Title(" ").Width(50).ClientTemplate("<i id=\"listDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteAnnouncement(#= Id#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
+
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Search().Text(@Localizer[LocalizationCaptions.Search].Value);
+    })
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:800px;" })
+    .ClientDetailTemplateId("ChildGrid")
+    .DataSource(dataSource => dataSource
+       .Ajax()
+        .Batch(true)
+        .PageSize(20)
+        .ServerOperation(true)
+            .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+        .Model(model => {
+            model.Id(p => p.Id);
+        })
+            .Create("EditingAnnouncement_Create", "Announcement")
+            .Update("EditingAnnouncement_Update", "Announcement")
+            .Destroy("EditingAnnouncement_Destroy", "Announcement")
+            .Read(read => read.Action("Get_AnnouncementApproval", "Announcement", new { IsRelease = Model.IsReleaseSearch, ReleaseDate = Model.ReleaseDateSearchStr, AnnouncementType = Model.AnnouncementTypeIdSearch })))
+            .Events(events => events.DataBound("dataBound"))
+                        .Pageable()
+
+    )
+
+
+<script id="ChildGrid" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<AnnouncementLangVM>()
+            .Name("grid_#=Id#")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Title).Filterable(false);
+                columns.Bound(p => p.Language.Name).Filterable(false);
+                columns.Bound(p => p.User.Name).Filterable(false);
+
+                columns.Bound(p => p.Content).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"updateAnnouncementLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">edit</i>");
+                columns.Bound(p => p.Content).Title(" ").Width(50).ClientTemplate("<i id=\"searchDiv_#= Id#\" class=\"material-icons dp48\" onclick=\"deleteAnnouncementLang(\\#=Id\\#)\" style=\"color:rgb(8 60 188);cursor: pointer;\">delete</i>");
+
+            })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .ServerOperation(true)
+                .Events(events => events.Error("error_handler").RequestEnd("onGridRequestEnd").Sync("sync_handler"))
+                .Model(model =>
+                {
+                    model.Id(p => p.Id);
+                })
+                .Read(read => read.Action("Get_AnnouncementLang", "Announcement", new { announcementId = "#=Id#" }))
+            )
+            .Pageable()
+            .Sortable()
+            .ToClientTemplate()
+    )
+
+
+</script>

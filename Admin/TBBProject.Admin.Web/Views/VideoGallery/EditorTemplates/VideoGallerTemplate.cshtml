@@ -1,0 +1,57 @@
+﻿@model VideoGalleryVM
+<script>
+    function dateChange(e) {
+        $('#ReleaseDateStr').val(e.sender._oldText).trigger("change");
+    }
+    $(document).ready(function () {
+        $('#ReleaseDateStr').val($('#ReleaseDate').val()).trigger("change");
+
+    });
+</script>
+@Html.HiddenFor(i => i.ReleaseDateStr)
+<div class="row s12" style="min-width:750px;">
+    <div class="form-group">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LanguageId)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(p=>p.LanguageId)
+                                    .HtmlAttributes(new { style = "width:100%" })
+                                    .OptionLabel(@Localizer[LocalizationCaptions.SelectLanguage].Value)
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("Get_LanguageList", "Definitions");
+                                        });
+                                    }))
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Title)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Title, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.ReleaseDate)
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DatePickerFor(i=>i.ReleaseDate).Format("{0:dd.MM.yyyy}")
+                .Value(DateTime.Now).Events(i=>i.Change("dateChange"))
+                .HtmlAttributes(new { style = "width: 100%", title = "datetimepicker" })
+                .DateInput()
+            )
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(i => i.Url)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(i => i.Url, new { @class = "k-textbox", style = "width:100%" })
+        </div>
+    </div>
+</div>
+
+@Html.HiddenFor(i => i.Id)

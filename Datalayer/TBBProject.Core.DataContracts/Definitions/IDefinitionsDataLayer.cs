@@ -39,5 +39,14 @@ namespace TBBProject.Core.DataContracts
         Task<List<Icons>> GetIconsAsync();
         #endregion
 
+
+
+        #region Languages
+        IQueryable<Language> GetLanguages();
+        void CreateLanguages(Language model);
+        void UpdateLanguages(Language model);
+        void DeleteLanguages(Language model);
+        Task<List<Language>> GetLanguagesAllAsync();
+        #endregion
     }
 }
